@@ -1,14 +1,15 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl):	Wieloplatformowy system make o otwartych ¼ród³ach
 Name:		cmake
-Version:	1.4.7
+Version:	1.8.3
 Release:	1
 License:	BSD
 Group:		Development/Building
 # current: http://www.cmake.org/files/v2.0/cmake-2.0.2.tar.gz
-Source0:	CMake%{version}-src-unix.tar.bz2
-Patch0:		cmake-ncurses.patch
-URL:		http://www.cmake.org/HTML/Index.html
+Source0:	http://www.cmake.org/files/v1.8/%{name}-%{version}.tar.gz	
+# Source0-md5:	781afe6ed9000e303bf6ac3e4e384dce
+Patch0:		%{name}-ncurses.patch
+URL:		http://www.cmake.org/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -30,14 +31,21 @@ konfiguracji systemu, generowanie preprocesora, generowanie kodu i
 dziedziczenie szablonów.
 
 %prep
-%setup -q -n CMake-%{version}
+%setup -q
 %patch0 -p1
 
 %build
-CXXFLAGS="%{rpmcflags} -I%{_includedir}/ncurses"
-%configure2_13
-%{__make} \
-	CXXFLAGS="%{rpmcflags} -I%{_includedir}/ncurses"
+./bootstrap \
+	--prefix=%{_prefix} \
+	--mandir=/share/man \
+	--datadir=/share/cmake \
+	--verbose
+
+./Bootstrap.cmk/cmake \
+	-DCURSES_INCLUDE_PATH=%{_includedir}/ncurses
+
+%{__make}
+	
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -45,17 +53,16 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-mv -f $RPM_BUILD_ROOT%{_prefix}/man/* $RPM_BUILD_ROOT%{_mandir}
+rm -rf $RPM_BUILD_ROOT/usr/doc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog.txt *.pdf *.rtf Copyright.txt *.gif
+%doc ChangeLog.txt *.pdf *.rtf Copyright.txt *.gif Docs/{cmake,ccmake,ctest}.*
 %attr(755,root,root) %{_bindir}/ccmake
 %attr(755,root,root) %{_bindir}/cmake
-%attr(755,root,root) %{_bindir}/cmaketest
 %attr(755,root,root) %{_bindir}/ctest
 %{_mandir}/man1/*.1*
-%{_datadir}/CMake
+%{_datadir}/cmake
