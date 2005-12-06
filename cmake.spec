@@ -1,15 +1,17 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl):	Wieloplatformowy system make o otwartych ¼ród³ach
 Name:		cmake
-Version:	1.8.3
+Version:	2.2.3
 Release:	1
 License:	BSD
 Group:		Development/Building
-# current: http://www.cmake.org/files/v2.0/cmake-2.0.2.tar.gz
-Source0:	http://www.cmake.org/files/v1.8/%{name}-%{version}.tar.gz	
-# Source0-md5:	781afe6ed9000e303bf6ac3e4e384dce
+Source0:	http://www.cmake.org/files/v2.2/%{name}-%{version}.tar.gz	
+# Source0-md5:	d29377b76fbab6a74107c49adc9e6457
 Patch0:		%{name}-ncurses.patch
 URL:		http://www.cmake.org/
+BuildRequires:	libstdc++-devel
+BuildRequires:	ncurses-devel
+BuildRequires:	rpmbuild(macros) >= 1.167
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -34,18 +36,23 @@ dziedziczenie szablonów.
 %setup -q
 %patch0 -p1
 
+cat > "init.cmake" <<EOF
+SET (CURSES_INCLUDE_PATH "%{_includedir}/ncurses" CACHE PATH " " FORCE)
+EOF
+
 %build
+export CC="%{__cc}"
+export CXX="%{__cxx}"
+export CFLAGS="%{rpmcflags}"
+export CXXFLAGS="%{rpmcxxflags}"
 ./bootstrap \
 	--prefix=%{_prefix} \
 	--mandir=/share/man \
 	--datadir=/share/cmake \
+	--init=init.cmake \
 	--verbose
 
-./Bootstrap.cmk/cmake \
-	-DCURSES_INCLUDE_PATH=%{_includedir}/ncurses
-
 %{__make}
-	
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -60,7 +67,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog.txt *.pdf *.rtf Copyright.txt *.gif Docs/{cmake,ccmake,ctest}.*
+%doc ChangeLog.* Copyright.txt *.gif *.pdf Docs/{cmake,ctest}.{txt,html}
 %attr(755,root,root) %{_bindir}/ccmake
 %attr(755,root,root) %{_bindir}/cmake
 %attr(755,root,root) %{_bindir}/ctest
