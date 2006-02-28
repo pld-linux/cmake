@@ -5,7 +5,7 @@ Version:	2.2.3
 Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	http://www.cmake.org/files/v2.2/%{name}-%{version}.tar.gz	
+Source0:	http://www.cmake.org/files/v2.2/%{name}-%{version}.tar.gz
 # Source0-md5:	d29377b76fbab6a74107c49adc9e6457
 Patch0:		%{name}-ncurses.patch
 URL:		http://www.cmake.org/
@@ -60,7 +60,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-rm -rf $RPM_BUILD_ROOT/usr/doc
+rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
