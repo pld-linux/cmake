@@ -1,12 +1,12 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl):	Wieloplatformowy system make o otwartych ¼ród³ach
 Name:		cmake
-Version:	2.2.3
+Version:	2.4.0
 Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	http://www.cmake.org/files/v2.2/%{name}-%{version}.tar.gz
-# Source0-md5:	d29377b76fbab6a74107c49adc9e6457
+Source0:	http://www.cmake.org/files/v2.4/%{name}-%{version}.tar.gz
+# Source0-md5:	9e2c9ad2fc50baafaa49cba89de1d979
 Patch0:		%{name}-ncurses.patch
 URL:		http://www.cmake.org/
 BuildRequires:	libstdc++-devel
@@ -70,6 +70,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc ChangeLog.* Copyright.txt *.gif *.pdf Docs/{cmake,ctest}.{txt,html}
 %attr(755,root,root) %{_bindir}/ccmake
 %attr(755,root,root) %{_bindir}/cmake
+%attr(755,root,root) %{_bindir}/cpack
 %attr(755,root,root) %{_bindir}/ctest
 %{_mandir}/man1/*.1*
 %{_datadir}/cmake
