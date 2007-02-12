@@ -1,5 +1,5 @@
 Summary:	Cross-platform, open-source make system
-Summary(pl):	Wieloplatformowy system make o otwartych ºrÛd≥ach
+Summary(pl.UTF-8):   Wieloplatformowy system make o otwartych ≈∫r√≥d≈Çach
 Name:		cmake
 Version:	2.4.6
 Release:	1
@@ -23,14 +23,14 @@ possible to support complex environments requiring system
 configuration, pre-processor generation, code generation, and template
 instantiation.
 
-%description -l pl
-CMake s≥uøy do sterowania procesem kompilacji oprogramowania przy
-uøyciu prostych plikÛw konfiguracyjnych niezaleønych od platformy i
+%description -l pl.UTF-8
+CMake s≈Çu≈ºy do sterowania procesem kompilacji oprogramowania przy
+u≈ºyciu prostych plik√≥w konfiguracyjnych niezale≈ºnych od platformy i
 kompilatora. CMake generuje natywne pliki makefile i workspace,
-ktÛrych moøna uøywaÊ w wybranym ∂rodowisku kompilatora. CMake jest
-do∂Ê przemy∂lany: moøe obs≥uøyÊ z≥oøone ∂rodowiska wymagaj±ce
+kt√≥rych mo≈ºna u≈ºywaƒá w wybranym ≈õrodowisku kompilatora. CMake jest
+do≈õƒá przemy≈õlany: mo≈ºe obs≈Çu≈ºyƒá z≈Ço≈ºone ≈õrodowiska wymagajƒÖce
 konfiguracji systemu, generowanie preprocesora, generowanie kodu i
-dziedziczenie szablonÛw.
+dziedziczenie szablon√≥w.
 
 %prep
 %setup -q
