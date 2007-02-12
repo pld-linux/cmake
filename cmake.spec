@@ -1,5 +1,5 @@
 Summary:	Cross-platform, open-source make system
-Summary(pl.UTF-8):   Wieloplatformowy system make o otwartych źródłach
+Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
 Version:	2.4.6
 Release:	1
