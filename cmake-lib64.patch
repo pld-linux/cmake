@@ -1,14 +1,11 @@
---- cmake-2.4.7/Modules/KDE3Macros.cmake	2007-07-17 00:12:30.000000000 +0300
-+++ cmake/Modules/KDE3Macros.cmake	2007-12-06 12:18:50.772890020 +0200
-@@ -319,9 +319,9 @@
+--- cmake-2.4.8/Modules/KDE3Macros.cmake~	2008-01-29 00:39:54.000000000 +0100
++++ cmake-2.4.8/Modules/KDE3Macros.cmake	2008-01-29 00:41:11.559753940 +0100
+@@ -319,7 +319,7 @@
     FILE(APPEND ${_laname} "# Should we warn about portability when linking against -modules?\nshouldnotlink=yes\n")
     FILE(APPEND ${_laname} "# Files to dlopen/dlpreopen\ndlopen=''\ndlpreopen=''\n")
     FILE(APPEND ${_laname} "# Directory that this library needs to be installed in:\n")
 -   FILE(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib/kde3'\n")
 +   FILE(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib64/kde3'\n")
  
--   INSTALL_FILES(/lib/kde3 FILES ${_laname})
-+   INSTALL_FILES(/lib64/kde3 FILES ${_laname})
+    INSTALL_FILES(${KDE3_LIBTOOL_DIR} FILES ${_laname})
  ENDMACRO(KDE3_INSTALL_LIBTOOL_FILE)
- 
- 
