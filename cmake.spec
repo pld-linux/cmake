@@ -1,18 +1,22 @@
+#
+# Conditional build:
+%bcond_with	bootstrap # use internal versions of some libraries
+#
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	2.4.8
-Release:	3
+Version:	2.6.0
+Release:	0.1
 License:	BSD
 Group:		Development/Building
-Source0:	http://www.cmake.org/files/v2.4/%{name}-%{version}.tar.gz
-# Source0-md5:	f5dd061c31765a49dc17ae8bdc986779
-Patch0:		%{name}-ncurses.patch
+Source0:	http://www.cmake.org/files/v2.6/%{name}-%{version}.tar.gz
+# Source0-md5:	e95ae003672dfc6c8151a1ee49a0d4a6
 Patch1:		%{name}-lib64.patch
 URL:		http://www.cmake.org/HTML/Index.html
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	rpmbuild(macros) >= 1.167
+%{?!with_bootstrap:BuildRequires:	xmlrpc-c-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -35,13 +39,13 @@ dziedziczenie szablonów.
 
 %prep
 %setup -q
-%patch0 -p1
 %if "%{_lib}" == "lib64"
 %patch1 -p1
 %endif
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
+SET (CMAKE_AR "%{__ar}" CACHE FILEPATH " " FORCE)
 EOF
 
 %build
@@ -49,11 +53,13 @@ export CC="%{__cc}"
 export CXX="%{__cxx}"
 export CFLAGS="%{rpmcflags}"
 export CXXFLAGS="%{rpmcxxflags}"
+export LDFLAGS="%{rpmldflags}"
 ./bootstrap \
 	--prefix=%{_prefix} \
 	--mandir=/share/man \
 	--datadir=/share/cmake \
 	--init=init.cmake \
+	%{?!with_bootstrap:--system-libs }\
 	--verbose
 
 %{__make}
