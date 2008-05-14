@@ -16,7 +16,7 @@ URL:		http://www.cmake.org/HTML/Index.html
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	rpmbuild(macros) >= 1.167
-%{?!with_bootstrap:BuildRequires:	xmlrpc-c-devel}
+%{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -59,7 +59,7 @@ export LDFLAGS="%{rpmldflags}"
 	--mandir=/share/man \
 	--datadir=/share/cmake \
 	--init=init.cmake \
-	%{?!with_bootstrap:--system-libs }\
+	%{!?with_bootstrap:--system-libs} \
 	--verbose
 
 %{__make}
