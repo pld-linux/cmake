@@ -1,3 +1,5 @@
+# TODO: any valid CMAKE_BUILD_TYPE causes overriding of our optflags
+#       (and default non-verbose makefiles are hiding it!)
 #
 # Conditional build:
 %bcond_with	bootstrap # use internal versions of some libraries
