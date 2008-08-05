@@ -6,6 +6,7 @@
 #
 # Conditional build:
 %bcond_with	bootstrap # use internal versions of some libraries
+%bcond_without	gui
 #
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
@@ -18,8 +19,11 @@ Source0:	http://www.cmake.org/files/v2.6/%{name}-%{version}.tar.gz
 # Source0-md5:	e95ae003672dfc6c8151a1ee49a0d4a6
 Patch1:		%{name}-lib64.patch
 URL:		http://www.cmake.org/HTML/Index.html
+%{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
+%{?with_gui:BuildRequires:	qt4-build}
+%{?with_gui:BuildRequires:	qt4-qmake}
 BuildRequires:	rpmbuild(macros) >= 1.167
 %{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -37,10 +41,18 @@ instantiation.
 CMake służy do sterowania procesem kompilacji oprogramowania przy
 użyciu prostych plików konfiguracyjnych niezależnych od platformy i
 kompilatora. CMake generuje natywne pliki makefile i workspace,
-których można używać w wybranym środowisku kompilatora. CMake jest
-dość przemyślany: może obsłużyć złożone środowiska wymagające
-konfiguracji systemu, generowanie preprocesora, generowanie kodu i
-dziedziczenie szablonów.
+których można użyMesa-libGLU-devel-7.0.3-2.athlonwać w wybranym
+środowisku kompilatora. CMake jest dość przemyślany: może
+obsłużyć złożone środowiska wymagające konfiguracji systemu,
+generowanie preprocesora, generowanie kodu i dziedziczenie szablonów.
+
+%package gui
+Summary:	Qt GUI for %{name}
+Group:		Development/Tools
+Requires:	%{name} = %{version}-%{release}
+
+%description    gui
+The %{name}-gui package contains the Qt based GUI for CMake.
 
 %prep
 %setup -q
@@ -65,6 +77,7 @@ export LDFLAGS="%{rpmldflags}"
 	--datadir=/share/cmake \
 	--init=init.cmake \
 	%{!?with_bootstrap:--system-libs} \
+	%{?with_gui:--qt-gui} \
 	--verbose
 
 %{__make}
@@ -89,3 +102,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/ctest
 %{_mandir}/man1/*.1*
 %{_datadir}/cmake
+
+%files gui
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/cmake-gui
+%{_datadir}/mime/packages/cmakecache.xml
+%{_desktopdir}/CMake.desktop
+%{_pixmapsdir}/CMakeSetup.png
