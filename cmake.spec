@@ -19,7 +19,7 @@ Source0:	http://www.cmake.org/files/v2.6/%{name}-%{version}.tar.gz
 # Source0-md5:	6717f4bc3cfcced4172ad98660ce7599
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-ar.patch
-URL:		http://www.cmake.org/HTML/
+URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
