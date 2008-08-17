@@ -5,8 +5,8 @@
 #   (is there any standard way???)
 #
 # Conditional build:
-%bcond_with	bootstrap # use internal versions of some libraries
-%bcond_without	gui
+%bcond_with	bootstrap	# use internal versions of some libraries
+%bcond_without	gui		# don't build gui package
 #
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
@@ -48,12 +48,17 @@ konfiguracji systemu, generowanie preprocesora, generowanie kodu
 i dziedziczenie szablonów.
 
 %package gui
-Summary:	Qt GUI for %{name}
+Summary:	Qt GUI for CMake
+Summary(pl.UTF-8):	Graficzny interfejs użytkownika Qt dla CMake
 Group:		Development/Tools
 Requires:	%{name} = %{version}-%{release}
 
-%description    gui
-The %{name}-gui package contains the Qt based GUI for CMake.
+%description gui
+This package contains the Qt based GUI for CMake.
+
+%description gui -l pl.UTF-8
+Ten pakiet zawiera oparty na Qt graficzny interfejs użytkownika dla
+CMake.
 
 %prep
 %setup -q
