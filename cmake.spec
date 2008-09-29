@@ -12,7 +12,7 @@ Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
 Version:	2.6.1
-Release:	3
+Release:	4
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v2.6/%{name}-%{version}.tar.gz
@@ -26,7 +26,7 @@ BuildRequires:	ncurses-devel
 %{?with_gui:BuildRequires:	qt4-build}
 %{?with_gui:BuildRequires:	qt4-qmake}
 BuildRequires:	rpmbuild(macros) >= 1.167
-%{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel}
+%{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel >= 1.4.12-2}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
