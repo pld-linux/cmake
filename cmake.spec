@@ -12,13 +12,12 @@ Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
 Version:	2.6.2
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v2.6/%{name}-%{version}.tar.gz
 # Source0-md5:	9e82aa3beb991aa8e5797cf330618d42
 Patch0:		%{name}-lib64.patch
-Patch1:		%{name}-ar.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	libstdc++-devel
@@ -65,7 +64,6 @@ CMake.
 %if "%{_lib}" == "lib64"
 %patch0 -p1
 %endif
-%patch1 -p0
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
