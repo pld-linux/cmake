@@ -88,6 +88,7 @@ export LDFLAGS="%{rpmldflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_libdir}/cmake
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -106,6 +107,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/ctest
 %{_mandir}/man1/*.1*
 %{_datadir}/cmake
+%{_libdir}/cmake
 
 %files gui
 %defattr(644,root,root,755)
