@@ -107,7 +107,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/ctest
 %{_mandir}/man1/*.1*
 %{_datadir}/cmake
-%{_libdir}/cmake
+%dir %{_libdir}/cmake
 
 %files gui
 %defattr(644,root,root,755)
