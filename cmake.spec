@@ -11,12 +11,12 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	2.6.4
+Version:	2.8.0
 Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	http://www.cmake.org/files/v2.6/%{name}-%{version}.tar.gz
-# Source0-md5:	50f387d0436696c4a68b5512a72c9cde
+Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
+# Source0-md5:	3b3679b8a6afaedc38a8c15dd7ff4fcf
 Patch0:		%{name}-lib64.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
@@ -84,7 +84,7 @@ export LDFLAGS="%{rpmldflags}"
 	%{?with_gui:--qt-gui} \
 	--verbose
 
-%{__make}
+%{__make} VERBOSE=1
 
 %install
 rm -rf $RPM_BUILD_ROOT
