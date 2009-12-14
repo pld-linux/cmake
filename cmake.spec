@@ -109,9 +109,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/cmake
 %dir %{_libdir}/cmake
 
+%if %{with gui}
 %files gui
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cmake-gui
 %{_datadir}/mime/packages/cmakecache.xml
 %{_desktopdir}/CMake.desktop
 %{_pixmapsdir}/CMakeSetup.png
+%endif
