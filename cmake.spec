@@ -11,12 +11,12 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	2.8.0
-Release:	2
+Version:	2.8.1
+Release:	1
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
-# Source0-md5:	3b3679b8a6afaedc38a8c15dd7ff4fcf
+# Source0-md5:	a92ad653f9ccc1595d16cd9707f49acc
 Patch0:		%{name}-lib64.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
@@ -39,12 +39,12 @@ instantiation.
 
 %description -l pl.UTF-8
 CMake służy do sterowania procesem kompilacji oprogramowania przy
-użyciu prostych plików konfiguracyjnych niezależnych od platformy
-i kompilatora. CMake generuje natywne pliki makefile i workspace,
+użyciu prostych plików konfiguracyjnych niezależnych od platformy i
+kompilatora. CMake generuje natywne pliki makefile i workspace,
 których można używać w wybranym środowisku kompilatora. CMake jest
 dość przemyślany: może obsłużyć złożone środowiska wymagające
-konfiguracji systemu, generowanie preprocesora, generowanie kodu
-i dziedziczenie szablonów.
+konfiguracji systemu, generowanie preprocesora, generowanie kodu i
+dziedziczenie szablonów.
 
 %package gui
 Summary:	Qt GUI for CMake
@@ -115,5 +115,5 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/cmake-gui
 %{_datadir}/mime/packages/cmakecache.xml
 %{_desktopdir}/CMake.desktop
-%{_pixmapsdir}/CMakeSetup.png
+%{_pixmapsdir}/CMakeSetup32.png
 %endif
