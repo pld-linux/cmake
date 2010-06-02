@@ -42,7 +42,7 @@ CMake służy do sterowania procesem kompilacji oprogramowania przy
 użyciu prostych plików konfiguracyjnych niezależnych od platformy i
 kompilatora. CMake generuje natywne pliki makefile i workspace,
 których można używać w wybranym środowisku kompilatora. CMake jest
-dość przemyślany: może obsłużyć złożone środowiska wymagające
+dość wyrafinowany: może obsłużyć złożone środowiska wymagające
 konfiguracji systemu, generowanie preprocesora, generowanie kodu i
 dziedziczenie szablonów.
 
