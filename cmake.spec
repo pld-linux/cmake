@@ -11,16 +11,17 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	2.8.2
-Release:	2
+Version:	2.8.3
+Release:	1
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
-# Source0-md5:	8c967d5264657a798f22ee23976ff0d9
+# Source0-md5:	a76a44b93acf5e3badda9de111385921
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-tinfo.patch
-Patch2:		python-2.7.patch
 URL:		http://www.cmake.org/
+Requires:	libarchive
+BuildRequires:	libarchive-devel
 %{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
@@ -67,7 +68,6 @@ CMake.
 %patch0 -p1
 %endif
 %patch1 -p0
-%patch2 -p1
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
