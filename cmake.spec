@@ -20,15 +20,15 @@ Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-tinfo.patch
 URL:		http://www.cmake.org/
-Requires:	libarchive
-BuildRequires:	libarchive-devel
 %{?with_gui:BuildRequires:	QtGui-devel}
+BuildRequires:	libarchive-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel
 %{?with_gui:BuildRequires:	qt4-build}
 %{?with_gui:BuildRequires:	qt4-qmake}
 BuildRequires:	rpmbuild(macros) >= 1.167
 %{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel >= 1.4.12-2}
+Requires:	libarchive
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
