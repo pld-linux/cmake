@@ -86,6 +86,7 @@ export LDFLAGS="%{rpmldflags}"
 	--init=init.cmake \
 	%{!?with_bootstrap:--system-libs} \
 	%{?with_gui:--qt-gui} \
+	--qt-qmake=/usr/bin/qmake-qt4 \
 	--verbose
 
 %{__make} VERBOSE=1
@@ -108,7 +109,16 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/cmake
 %attr(755,root,root) %{_bindir}/cpack
 %attr(755,root,root) %{_bindir}/ctest
-%{_mandir}/man1/*.1*
+%{_mandir}/man1/ccmake.1*
+%{_mandir}/man1/cmake.1*
+%{_mandir}/man1/cmakecommands.1*
+%{_mandir}/man1/cmakecompat.1*
+%{_mandir}/man1/cmakemodules.1*
+%{_mandir}/man1/cmakepolicies.1*
+%{_mandir}/man1/cmakeprops.1*
+%{_mandir}/man1/cmakevars.1*
+%{_mandir}/man1/cpack.1*
+%{_mandir}/man1/ctest.1*
 %{_datadir}/cmake
 %dir %{_libdir}/cmake
 
@@ -119,4 +129,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/mime/packages/cmakecache.xml
 %{_desktopdir}/CMake.desktop
 %{_pixmapsdir}/CMakeSetup32.png
+%{_mandir}/man1/cmake-gui.1*
 %endif
