@@ -1,0 +1,31 @@
+commit 6fe8624b7ff39f8511f4f4d7ebcbc5681932a6a5
+Author: Ben Boeckel <ben.boeckel@kitware.com>
+Date:   Mon Nov 22 14:56:55 2010 -0500
+
+    Fix parsing of cache variables without a type
+    
+    These mainly come from the command line or manual entries in the
+    CMakeCache.txt file. We want to stop at the first '=' because this is
+    what is most likely to have been meant. The variable can be quoted if
+    the '=' is intended.
+    
+    Caveat: What if one wants both '"' and '=' in a variable name?
+
+diff --git a/Source/cmCacheManager.cxx b/Source/cmCacheManager.cxx
+index 2aa6236..fe6467a 100644
+--- a/Source/cmCacheManager.cxx
++++ b/Source/cmCacheManager.cxx
+@@ -97,10 +97,10 @@ bool cmCacheManager::ParseEntry(const char* entry,
+                                 std::string& var,
+                                 std::string& value)
+ {
+-  // input line is:         key:type=value
++  // input line is:         key=value
+   static cmsys::RegularExpression reg(
+-    "^([^:]*)=(.*[^\r\t ]|[\r\t ]*)[\r\t ]*$");
+-  // input line is:         "key":type=value
++    "^([^=]*)=(.*[^\r\t ]|[\r\t ]*)[\r\t ]*$");
++  // input line is:         "key"=value
+   static cmsys::RegularExpression regQuoted(
+     "^\"([^\"]*)\"=(.*[^\r\t ]|[\r\t ]*)[\r\t ]*$");
+   bool flag = false;
