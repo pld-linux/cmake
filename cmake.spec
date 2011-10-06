@@ -11,19 +11,18 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	2.8.5
-Release:	2
+Version:	2.8.6
+Release:	1
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
-# Source0-md5:	3c5d32cec0f4c2dc45f4c2e84f4a20c5
+# Source0-md5:	2147da452fd9212bb9b4542a9eee9d5b
 Patch0:		%{name}-lib64.patch
-Patch1:		%{name}-tinfo.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	libarchive-devel
 BuildRequires:	libstdc++-devel
-BuildRequires:	ncurses-devel
+BuildRequires:	ncurses-devel > 5.9-3
 %{?with_gui:BuildRequires:	qt4-build}
 %{?with_gui:BuildRequires:	qt4-qmake}
 BuildRequires:	rpmbuild(macros) >= 1.167
@@ -67,7 +66,6 @@ CMake.
 %if "%{_lib}" == "lib64"
 %patch0 -p1
 %endif
-%patch1 -p0
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
