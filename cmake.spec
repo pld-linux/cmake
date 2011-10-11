@@ -123,6 +123,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/cmake/Templates
 %{_datadir}/cmake/include
 %dir %{_libdir}/cmake
+%{_aclocaldir}/cmake.m4
 
 %if %{with gui}
 %files gui
