@@ -12,7 +12,7 @@ Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
 Version:	2.8.6
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
@@ -27,7 +27,7 @@ BuildRequires:	ncurses-devel > 5.9-3
 %{?with_gui:BuildRequires:	qt4-qmake}
 BuildRequires:	rpmbuild(macros) >= 1.167
 %{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel >= 1.4.12-2}
-Requires:	filesystem >= 3.0-46
+Requires:	filesystem >= 3.0-52
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -91,11 +91,11 @@ export LDFLAGS="%{rpmldflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_libdir}/cmake
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-rm -r $RPM_BUILD_ROOT%{_prefix}/doc
+%{__rm} -r $RPM_BUILD_ROOT%{_prefix}/doc
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -122,7 +122,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/cmake/Modules/*
 %{_datadir}/cmake/Templates
 %{_datadir}/cmake/include
-%dir %{_libdir}/cmake
 %{_aclocaldir}/cmake.m4
 
 %if %{with gui}
