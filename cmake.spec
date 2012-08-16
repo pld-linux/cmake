@@ -11,13 +11,14 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	2.8.8
+Version:	2.8.9
 Release:	1
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
-# Source0-md5:	ba74b22c788a0c8547976b880cd02b17
+# Source0-md5:	801f4c87f8b604f727df5bf1f05a59e7
 Patch0:		%{name}-lib64.patch
+Patch1:		%{name}-helpers.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	libarchive-devel
@@ -61,14 +62,32 @@ This package contains the Qt based GUI for CMake.
 Ten pakiet zawiera oparty na Qt graficzny interfejs użytkownika dla
 CMake.
 
+%package emacs
+Summary:	Emacs mode for cmake
+Group:		Development/Tools
+
+%description emacs
+Emacs mode for cmake.
+
+%package -n bash-completion-%{name}
+Summary:	bash-completion for cmake
+Group:		Applications/Shells
+Requires:	%{name}
+
+%description -n bash-completion-%{name}
+bash-completion for Yum Utils.
+
 %prep
 %setup -q
 %if "%{_lib}" == "lib64"
 %patch0 -p1
 %endif
+%patch1 -p1
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
+SET (CMAKE_INSTALL_SYSCONFDIR "%{_sysconfdir}" CACHE PATH " " FORCE)
+SET (CMAKE_INSTALL_DATADIR "%{_datadir}" CACHE PATH " " FORCE)
 EOF
 
 %build
@@ -133,3 +152,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_pixmapsdir}/CMakeSetup32.png
 %{_mandir}/man1/cmake-gui.1*
 %endif
+
+%files emacs
+%defattr(644,root,root,755)
+%{_datadir}/emacs/site-lisp/cmake-mode.el
+
+%files -n bash-completion-%{name}
+%defattr(644,root,root,755)
+/etc/bash_completion.d/*

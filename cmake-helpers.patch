@@ -1,0 +1,16 @@
+--- a/Docs/bash-completion/CMakeLists.txt	2012-08-09 20:15:18.000000000 +0200
++++ b/Docs/bash-completion/CMakeLists.txt	2012-08-15 13:46:38.124245369 +0200
+@@ -5,4 +5,4 @@
+ # add symlinks to the files in appropriate places
+ #  /etc/bash_completion.d/
+ #  DATADIR/completions (may be /usr/share/<package>/completions
+-install(FILES cmake cpack ctest DESTINATION ${REL_CMAKE_DATA_DIR}/completions)
++install(FILES cmake cpack ctest DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/bash_completion.d)
+--- a/Docs/CMakeLists.txt	2012-08-09 20:15:18.000000000 +0200
++++ b/Docs/CMakeLists.txt	2012-08-16 13:29:07.401201870 +0200
+@@ -1,4 +1,4 @@
+ string(REGEX REPLACE "^/(.*)" "\\1" REL_CMAKE_DATA_DIR "${CMAKE_DATA_DIR}")
+ install(FILES cmake-help.vim cmake-indent.vim cmake-syntax.vim DESTINATION ${REL_CMAKE_DATA_DIR}/editors/vim)
+-install(FILES cmake-mode.el DESTINATION ${REL_CMAKE_DATA_DIR}/editors/emacs)
++install(FILES cmake-mode.el DESTINATION ${CMAKE_INSTALL_DATADIR}/emacs/site-lisp)
+ ADD_SUBDIRECTORY (bash-completion)
