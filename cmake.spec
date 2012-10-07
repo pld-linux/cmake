@@ -63,19 +63,27 @@ Ten pakiet zawiera oparty na Qt graficzny interfejs użytkownika dla
 CMake.
 
 %package emacs
-Summary:	Emacs mode for cmake
+Summary:	Emacs mode for cmake files
+Summary(pl.UTF-8):	Tryb Emacsa dla plików cmake'a
 Group:		Development/Tools
 
 %description emacs
-Emacs mode for cmake.
+Emacs mode for cmake files.
+
+%description emacs -l pl.UTF-8
+Tryb Emacsa dla plików cmake'a.
 
 %package -n bash-completion-%{name}
 Summary:	bash-completion for cmake
+Summary(pl.UTF-8):	Bashowe dopełnianie parametrów dla cmake'a
 Group:		Applications/Shells
-Requires:	%{name}
+Requires:	%{name} = %{version}-%{release}
 
 %description -n bash-completion-%{name}
-bash-completion for Yum Utils.
+bash-completion for cmake.
+
+%description -n bash-completion-%{name} -l pl.UTF-8
+Bashowe dopełnianie parametrów dla cmake'a.
 
 %prep
 %setup -q
@@ -159,4 +167,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n bash-completion-%{name}
 %defattr(644,root,root,755)
-/etc/bash_completion.d/*
+/etc/bash_completion.d/cmake
+/etc/bash_completion.d/cpack
+/etc/bash_completion.d/ctest
