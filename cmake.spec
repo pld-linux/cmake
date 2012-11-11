@@ -12,7 +12,7 @@ Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
 Version:	2.8.10.1
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
