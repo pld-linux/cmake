@@ -7,16 +7,17 @@
 # Conditional build:
 %bcond_with	bootstrap	# use internal versions of some libraries
 %bcond_without	gui		# don't build gui package
+%bcond_without	tests
 
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	2.8.11
-Release:	2
+Version:	2.8.11.1
+Release:	1
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
-# Source0-md5:	be6008f2299613d23fe82ab53ef7472e
+# Source0-md5:	df5324a3b203373a9e0a04b924281a43
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-helpers.patch
 Patch2:		cmake-findruby.patch
@@ -117,6 +118,8 @@ export LDFLAGS="%{rpmldflags}"
 	--verbose
 
 %{__make} VERBOSE=1
+
+%{?with_tests:%{__make} test}
 
 %install
 rm -rf $RPM_BUILD_ROOT
