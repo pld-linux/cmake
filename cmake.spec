@@ -12,16 +12,15 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	2.8.11.2
+Version:	2.8.12
 Release:	1
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
-# Source0-md5:	6f5d7b8e7534a5d9e1a7664ba63cf882
+# Source0-md5:	105bc6d21cc2e9b6aff901e43c53afea
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-helpers.patch
 Patch2:		cmake-findruby.patch
-Patch3:		cmake-git.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	libarchive-devel
@@ -81,6 +80,7 @@ Summary:	bash-completion for cmake
 Summary(pl.UTF-8):	Bashowe dopełnianie parametrów dla cmake'a
 Group:		Applications/Shells
 Requires:	%{name} = %{version}-%{release}
+Requires:	bash-completion >= 2.0
 
 %description -n bash-completion-%{name}
 bash-completion for cmake.
@@ -95,7 +95,6 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %endif
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
@@ -174,6 +173,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n bash-completion-%{name}
 %defattr(644,root,root,755)
-/etc/bash_completion.d/cmake
-/etc/bash_completion.d/cpack
-/etc/bash_completion.d/ctest
+%{_datadir}/bash-completion/completions/cmake
+%{_datadir}/bash-completion/completions/cpack
+%{_datadir}/bash-completion/completions/ctest
