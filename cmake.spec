@@ -20,7 +20,8 @@ Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
 # Source0-md5:	9d38cd4e2c94c3cea97d0e2924814acc
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-helpers.patch
-Patch2:		cmake-findruby.patch
+Patch2:		%{name}-findruby.patch
+Patch3:		%{name}-tests.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	libarchive-devel
@@ -95,6 +96,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %endif
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
