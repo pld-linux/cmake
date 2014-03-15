@@ -83,6 +83,9 @@ Summary(pl.UTF-8):	Bashowe dopełnianie parametrów dla cmake'a
 Group:		Applications/Shells
 Requires:	%{name} = %{version}-%{release}
 Requires:	bash-completion >= 2.0
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description -n bash-completion-%{name}
 bash-completion for cmake.
