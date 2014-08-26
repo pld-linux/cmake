@@ -23,6 +23,7 @@ Patch1:		%{name}-helpers.patch
 Patch2:		%{name}-findruby.patch
 Patch3:		%{name}-tests.patch
 Patch4:		%{name}-freetype2.patch
+Patch5:		%{name}-findruby2.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	libarchive-devel
@@ -102,6 +103,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
