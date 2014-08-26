@@ -111,6 +111,9 @@ SET (CMAKE_INSTALL_SYSCONFDIR "%{_sysconfdir}" CACHE PATH " " FORCE)
 SET (CMAKE_INSTALL_DATADIR "%{_datadir}" CACHE PATH " " FORCE)
 EOF
 
+# cleanup backups after patching, modules are copied as-is
+find '(' -name '*~' -o -name '*.orig' ')' -print0 | xargs -0 -r -l512 rm -f
+
 %build
 export CC="%{__cc}"
 export CXX="%{__cxx}"
