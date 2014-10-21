@@ -13,7 +13,7 @@ Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
 Version:	2.8.12.2
-Release:	2
+Release:	3
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
@@ -24,6 +24,7 @@ Patch2:		%{name}-findruby.patch
 Patch3:		%{name}-tests.patch
 Patch4:		%{name}-freetype2.patch
 Patch5:		%{name}-findruby2.patch
+Patch6:		%{name}-findpython.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	libarchive-devel
@@ -104,6 +105,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
