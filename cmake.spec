@@ -12,17 +12,16 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	2.8.12.2
-Release:	3
+Version:	3.0.2
+Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	http://www.cmake.org/files/v2.8/%{name}-%{version}.tar.gz
-# Source0-md5:	17c6513483d23590cbce6957ec6d1e66
+Source0:	http://www.cmake.org/files/v3.0/%{name}-%{version}.tar.gz
+# Source0-md5:	db4c687a31444a929d2fdc36c4dfb95f
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-helpers.patch
 Patch2:		%{name}-findruby.patch
 Patch3:		%{name}-tests.patch
-Patch4:		%{name}-freetype2.patch
 Patch5:		%{name}-findruby2.patch
 Patch6:		%{name}-findpython.patch
 URL:		http://www.cmake.org/
@@ -33,6 +32,7 @@ BuildRequires:	ncurses-devel > 5.9-3
 %{?with_gui:BuildRequires:	qt4-build}
 %{?with_gui:BuildRequires:	qt4-qmake}
 BuildRequires:	rpmbuild(macros) >= 1.167
+BuildRequires:	sphinx-pdg
 %{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel >= 1.4.12-2}
 Requires:	filesystem >= 3.0-52
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -54,6 +54,17 @@ których można używać w wybranym środowisku kompilatora. CMake jest
 dość wyrafinowany: może obsłużyć złożone środowiska wymagające
 konfiguracji systemu, generowanie preprocesora, generowanie kodu i
 dziedziczenie szablonów.
+
+%package doc-html
+Summary:	CMake documentation in HTML format
+Summary(pl.UTF-8):	Dokumentacja do pakietu CMake w formacie HTML
+Group:		Documentation
+
+%description doc-html
+CMake documentation in HTML format.
+
+%description doc-html -l pl.UTF-8
+Dokumentacja do pakietu CMake w formacie HTML.
 
 %package gui
 Summary:	Qt GUI for CMake
@@ -103,7 +114,6 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 %patch5 -p1
 %patch6 -p1
 
@@ -130,6 +140,8 @@ export LDFLAGS="%{rpmldflags}"
 	%{!?with_bootstrap:--system-libs} \
 	%{?with_gui:--qt-gui} \
 	--qt-qmake=/usr/bin/qmake-qt4 \
+	--sphinx-html \
+	--sphinx-man \
 	--verbose
 
 %{__make} VERBOSE=1
@@ -148,21 +160,28 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog.* Copyright.txt *.gif Docs/{cmake,ctest}.{txt,html}
+%doc Copyright.txt README.rst *.gif
 %attr(755,root,root) %{_bindir}/ccmake
 %attr(755,root,root) %{_bindir}/cmake
 %attr(755,root,root) %{_bindir}/cpack
 %attr(755,root,root) %{_bindir}/ctest
 %{_mandir}/man1/ccmake.1*
 %{_mandir}/man1/cmake.1*
-%{_mandir}/man1/cmakecommands.1*
-%{_mandir}/man1/cmakecompat.1*
-%{_mandir}/man1/cmakemodules.1*
-%{_mandir}/man1/cmakepolicies.1*
-%{_mandir}/man1/cmakeprops.1*
-%{_mandir}/man1/cmakevars.1*
 %{_mandir}/man1/cpack.1*
 %{_mandir}/man1/ctest.1*
+%{_mandir}/man7/cmake-buildsystem.7*
+%{_mandir}/man7/cmake-commands.7*
+%{_mandir}/man7/cmake-developer.7*
+%{_mandir}/man7/cmake-generator-expressions.7*
+%{_mandir}/man7/cmake-generators.7*
+%{_mandir}/man7/cmake-language.7*
+%{_mandir}/man7/cmake-modules.7*
+%{_mandir}/man7/cmake-packages.7*
+%{_mandir}/man7/cmake-policies.7*
+%{_mandir}/man7/cmake-properties.7*
+%{_mandir}/man7/cmake-qt.7*
+%{_mandir}/man7/cmake-toolchains.7*
+%{_mandir}/man7/cmake-variables.7*
 # top cmake/Modules dirs belong to filesystem
 %{_datadir}/cmake/Modules/.NoDartCoverage
 %{_datadir}/cmake/Modules/*
@@ -171,10 +190,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/cmake/include
 %{_aclocaldir}/cmake.m4
 
+%files doc-html
+%defattr(644,root,root,755)
+%doc Utilities/Sphinx/html/*
+
 %if %{with gui}
 %files gui
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cmake-gui
+%{_datadir}/cmake/Help
 %{_datadir}/mime/packages/cmakecache.xml
 %{_desktopdir}/CMake.desktop
 %{_pixmapsdir}/CMakeSetup32.png

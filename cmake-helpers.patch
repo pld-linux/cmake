@@ -1,13 +1,13 @@
---- cmake-2.8.12/Docs/bash-completion/CMakeLists.txt.orig	2013-10-07 17:31:00.000000000 +0200
-+++ cmake-2.8.12/Docs/bash-completion/CMakeLists.txt	2013-10-20 17:12:23.756481217 +0200
+--- cmake-3.0.2/Auxiliary/bash-completion/CMakeLists.txt.orig	2013-10-07 17:31:00.000000000 +0200
++++ cmake-3.0.2/Auxiliary/bash-completion/CMakeLists.txt	2013-10-20 17:12:23.756481217 +0200
 @@ -5,4 +5,4 @@
  # add symlinks to the files in appropriate places
  #  /etc/bash_completion.d/
  #  DATADIR/completions (may be /usr/share/<package>/completions
 -install(FILES cmake cpack ctest DESTINATION ${CMAKE_DATA_DIR}/completions)
 +install(FILES cmake cpack ctest DESTINATION ${CMAKE_INSTALL_DATADIR}/bash-completion/completions)
---- cmake-2.8.12/Docs/CMakeLists.txt.orig	2013-10-20 17:07:32.733160096 +0200
-+++ cmake-2.8.12/Docs/CMakeLists.txt	2013-10-20 17:13:38.969811394 +0200
+--- cmake-3.0.2/Auxiliary/CMakeLists.txt.orig	2013-10-20 17:07:32.733160096 +0200
++++ cmake-3.0.2/Auxiliary/CMakeLists.txt	2013-10-20 17:13:38.969811394 +0200
 @@ -1,3 +1,3 @@
  install(FILES cmake-help.vim cmake-indent.vim cmake-syntax.vim DESTINATION ${CMAKE_DATA_DIR}/editors/vim)
 -install(FILES cmake-mode.el DESTINATION ${CMAKE_DATA_DIR}/editors/emacs)
