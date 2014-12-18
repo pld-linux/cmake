@@ -1,0 +1,267 @@
+From dd089e08b578f20b7dc7d2ce658e3df05e346e35 Mon Sep 17 00:00:00 2001
+From: Brad King <brad.king@kitware.com>
+Date: Mon, 15 Dec 2014 09:52:48 -0500
+Subject: [PATCH] install: Allow absolute EXPORT destination with relative
+ targets (#15258)
+
+When install(EXPORT) is given an absolute destination we cannot compute
+the install prefix relative to the installed export file location.
+Previously we disallowed installation of targets in such exports with a
+relative destination, but did not enforce this for target property
+values besides the location of the main target file.  This could lead to
+broken installations when the EXPORT is installed to an absolute path
+but usage requirements are specified relative to the install prefix.
+
+Since an EXPORT installed to an absolute destination cannot be relocated
+we can just hard-code the value of CMAKE_INSTALL_PREFIX as the base for
+relative paths.  This will allow absolute install(EXPORT) destinations
+to work with relative destinations for targets and usage requirements.
+
+Extend the ExportImport test with a case covering this behavior.
+---
+ .../release/dev/install-EXPORT-absolute-prefix.rst |    9 ++++
+ Source/cmExportInstallFileGenerator.cxx            |   57 +++++++-------------
+ Source/cmExportInstallFileGenerator.h              |    4 --
+ Tests/ExportImport/Export/CMakeLists.txt           |   15 ++++++
+ .../Export/include/abs/1a/testLibAbs1a.h           |    1 +
+ .../Export/include/abs/1b/testLibAbs1b.h           |    1 +
+ .../ExportImport/Export/include/abs/testLibAbs1.h  |    1 +
+ Tests/ExportImport/Export/testLibAbs1.c            |    1 +
+ Tests/ExportImport/Import/A/CMakeLists.txt         |   10 ++++
+ Tests/ExportImport/Import/A/imp_testExeAbs1.c      |   15 ++++++
+ 10 files changed, 73 insertions(+), 41 deletions(-)
+ create mode 100644 Help/release/dev/install-EXPORT-absolute-prefix.rst
+ create mode 100644 Tests/ExportImport/Export/include/abs/1a/testLibAbs1a.h
+ create mode 100644 Tests/ExportImport/Export/include/abs/1b/testLibAbs1b.h
+ create mode 100644 Tests/ExportImport/Export/include/abs/testLibAbs1.h
+ create mode 100644 Tests/ExportImport/Export/testLibAbs1.c
+ create mode 100644 Tests/ExportImport/Import/A/imp_testExeAbs1.c
+
+diff --git a/Help/release/dev/install-EXPORT-absolute-prefix.rst b/Help/release/dev/install-EXPORT-absolute-prefix.rst
+new file mode 100644
+index 0000000..1b2a01c
+--- /dev/null
++++ b/Help/release/dev/install-EXPORT-absolute-prefix.rst
+@@ -0,0 +1,9 @@
++install-EXPORT-absolute-prefix
++------------------------------
++
++* The :command:`install(EXPORT)` command now works with an absolute
++  ``DESTINATION`` even if targets in the export set are installed
++  with a destination or usage requirements specified relative to the
++  install prefix.  The value of the :variable:`CMAKE_INSTALL_PREFIX`
++  variable is hard-coded into the installed export file as the base
++  for relative references.
+diff --git a/Source/cmExportInstallFileGenerator.cxx b/Source/cmExportInstallFileGenerator.cxx
+index 23180f1..3f5866a 100644
+--- a/Source/cmExportInstallFileGenerator.cxx
++++ b/Source/cmExportInstallFileGenerator.cxx
+@@ -69,13 +69,24 @@ bool cmExportInstallFileGenerator::GenerateMainFile(std::ostream& os)
+   this->GenerateExpectedTargetsCode(os, expectedTargets);
+   }
+ 
+-  // Add code to compute the installation prefix relative to the
+-  // import file location.
++  // Set an _IMPORT_PREFIX variable for import location properties
++  // to reference if they are relative to the install prefix.
++  std::string installPrefix =
++    this->IEGen->GetMakefile()->GetSafeDefinition("CMAKE_INSTALL_PREFIX");
+   const char* installDest = this->IEGen->GetDestination();
+-  if(!cmSystemTools::FileIsFullPath(installDest))
++  if(cmSystemTools::FileIsFullPath(installDest))
+     {
+-    std::string installPrefix =
+-      this->IEGen->GetMakefile()->GetSafeDefinition("CMAKE_INSTALL_PREFIX");
++    // The export file is being installed to an absolute path so the
++    // package is not relocatable.  Use the configured install prefix.
++    os <<
++      "# The installation prefix configured by this project.\n"
++      "set(_IMPORT_PREFIX \"" << installPrefix << "\")\n"
++      "\n";
++    }
++  else
++    {
++    // Add code to compute the installation prefix relative to the
++    // import file location.
+     std::string absDest = installPrefix + "/" + installDest;
+     std::string absDestS = absDest + "/";
+     os << "# Compute the installation prefix relative to this file.\n"
+@@ -106,9 +117,6 @@ bool cmExportInstallFileGenerator::GenerateMainFile(std::ostream& os)
+       dest = cmSystemTools::GetFilenamePath(dest);
+       }
+     os << "\n";
+-
+-    // Import location properties may reference this variable.
+-    this->ImportPrefix = "${_IMPORT_PREFIX}/";
+     }
+ 
+   std::vector<std::string> missingTargets;
+@@ -209,12 +217,9 @@ bool cmExportInstallFileGenerator::GenerateMainFile(std::ostream& os)
+      << "\n";
+ 
+   // Cleanup the import prefix variable.
+-  if(!this->ImportPrefix.empty())
+-    {
+-    os << "# Cleanup temporary variables.\n"
+-       << "set(_IMPORT_PREFIX)\n"
+-       << "\n";
+-    }
++  os << "# Cleanup temporary variables.\n"
++     << "set(_IMPORT_PREFIX)\n"
++     << "\n";
+   this->GenerateImportedFileCheckLoop(os);
+ 
+   bool result = true;
+@@ -394,11 +399,7 @@ cmExportInstallFileGenerator
+   if(!cmSystemTools::FileIsFullPath(dest.c_str()))
+     {
+     // The target is installed relative to the installation prefix.
+-    if(this->ImportPrefix.empty())
+-      {
+-      this->ComplainAboutImportPrefix(itgen);
+-      }
+-    value = this->ImportPrefix;
++    value = "${_IMPORT_PREFIX}/";
+     }
+   value += dest;
+   value += "/";
+@@ -508,24 +509,6 @@ cmExportInstallFileGenerator
+   return namespaces;
+ }
+ 
+-
+-//----------------------------------------------------------------------------
+-void
+-cmExportInstallFileGenerator
+-::ComplainAboutImportPrefix(cmInstallTargetGenerator* itgen)
+-{
+-  const char* installDest = this->IEGen->GetDestination();
+-  cmOStringStream e;
+-  e << "install(EXPORT \""
+-    << this->IEGen->GetExportSet()->GetName()
+-    << "\") given absolute "
+-    << "DESTINATION \"" << installDest << "\" but the export "
+-    << "references an installation of target \""
+-    << itgen->GetTarget()->GetName() << "\" which has relative "
+-    << "DESTINATION \"" << itgen->GetDestination() << "\".";
+-  cmSystemTools::Error(e.str().c_str());
+-}
+-
+ //----------------------------------------------------------------------------
+ void
+ cmExportInstallFileGenerator
+diff --git a/Source/cmExportInstallFileGenerator.h b/Source/cmExportInstallFileGenerator.h
+index b851ad5..6f86ac9 100644
+--- a/Source/cmExportInstallFileGenerator.h
++++ b/Source/cmExportInstallFileGenerator.h
+@@ -83,14 +83,10 @@ protected:
+                                  std::set<std::string>& importedLocations
+                                 );
+ 
+-  void ComplainAboutImportPrefix(cmInstallTargetGenerator* itgen);
+-
+   std::string InstallNameDir(cmTarget* target, const std::string& config);
+ 
+   cmInstallExportGenerator* IEGen;
+ 
+-  std::string ImportPrefix;
+-
+   // The import file generated for each configuration.
+   std::map<std::string, std::string> ConfigImportFiles;
+ };
+diff --git a/Tests/ExportImport/Export/CMakeLists.txt b/Tests/ExportImport/Export/CMakeLists.txt
+index febdfe6..e130eca 100644
+--- a/Tests/ExportImport/Export/CMakeLists.txt
++++ b/Tests/ExportImport/Export/CMakeLists.txt
+@@ -508,3 +508,18 @@ export(TARGETS testExe2 testLib4 testLib5 testLib6 testExe3 testExe2lib
+   )
+ 
+ add_subdirectory(Interface)
++
++#-----------------------------------------------------------------------------
++# Install export with absolute destination but relative pieces.
++add_library(testLibAbs1 STATIC testLibAbs1.c)
++target_include_directories(testLibAbs1 INTERFACE
++  "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include/abs/1a;include/abs/1b>"
++  )
++install(
++  TARGETS testLibAbs1
++  EXPORT expAbs
++  ARCHIVE DESTINATION lib
++  INCLUDES DESTINATION include/abs
++  )
++install(DIRECTORY include/abs DESTINATION include)
++install(EXPORT expAbs NAMESPACE expAbs_ DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/expAbs)
+diff --git a/Tests/ExportImport/Export/include/abs/1a/testLibAbs1a.h b/Tests/ExportImport/Export/include/abs/1a/testLibAbs1a.h
+new file mode 100644
+index 0000000..4421227
+--- /dev/null
++++ b/Tests/ExportImport/Export/include/abs/1a/testLibAbs1a.h
+@@ -0,0 +1 @@
++#define testLibAbs1a
+diff --git a/Tests/ExportImport/Export/include/abs/1b/testLibAbs1b.h b/Tests/ExportImport/Export/include/abs/1b/testLibAbs1b.h
+new file mode 100644
+index 0000000..00a2a29
+--- /dev/null
++++ b/Tests/ExportImport/Export/include/abs/1b/testLibAbs1b.h
+@@ -0,0 +1 @@
++#define testLibAbs1b
+diff --git a/Tests/ExportImport/Export/include/abs/testLibAbs1.h b/Tests/ExportImport/Export/include/abs/testLibAbs1.h
+new file mode 100644
+index 0000000..19d80a5
+--- /dev/null
++++ b/Tests/ExportImport/Export/include/abs/testLibAbs1.h
+@@ -0,0 +1 @@
++extern int testLibAbs1(void);
+diff --git a/Tests/ExportImport/Export/testLibAbs1.c b/Tests/ExportImport/Export/testLibAbs1.c
+new file mode 100644
+index 0000000..34aec75
+--- /dev/null
++++ b/Tests/ExportImport/Export/testLibAbs1.c
+@@ -0,0 +1 @@
++int testLibAbs1(void) { return 0; }
+diff --git a/Tests/ExportImport/Import/A/CMakeLists.txt b/Tests/ExportImport/Import/A/CMakeLists.txt
+index eb0bbf8..9450c82 100644
+--- a/Tests/ExportImport/Import/A/CMakeLists.txt
++++ b/Tests/ExportImport/Import/A/CMakeLists.txt
+@@ -96,6 +96,16 @@ foreach(c DEBUG RELWITHDEBINFO)
+ endforeach()
+ 
+ #-----------------------------------------------------------------------------
++include(${CMAKE_INSTALL_PREFIX}/lib/expAbs/expAbs.cmake)
++
++add_executable(imp_testExeAbs1
++  imp_testExeAbs1.c
++  )
++target_link_libraries(imp_testExeAbs1
++  expAbs_testLibAbs1
++  )
++
++#-----------------------------------------------------------------------------
+ # Create a custom target to generate a header for the libraries below.
+ # Drive the header generation through an indirect chain of imported
+ # target dependencies.
+diff --git a/Tests/ExportImport/Import/A/imp_testExeAbs1.c b/Tests/ExportImport/Import/A/imp_testExeAbs1.c
+new file mode 100644
+index 0000000..069c3f0
+--- /dev/null
++++ b/Tests/ExportImport/Import/A/imp_testExeAbs1.c
+@@ -0,0 +1,15 @@
++#include "testLibAbs1.h"
++#include "testLibAbs1a.h"
++#include "testLibAbs1b.h"
++#ifndef testLibAbs1a
++# error "testLibAbs1a not defined"
++#endif
++#ifndef testLibAbs1b
++# error "testLibAbs1b not defined"
++#endif
++int main()
++{
++  return 0
++    + testLibAbs1()
++    ;
++}
+-- 
+1.7.10.4
+
