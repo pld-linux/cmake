@@ -1,0 +1,117 @@
+--- cmake-2.4.10/Modules/KDE3Macros.cmake.orig	2012-11-03 08:29:52.205394821 +0100
++++ cmake-2.4.10/Modules/KDE3Macros.cmake	2012-11-03 08:31:27.108749182 +0100
+@@ -336,7 +336,7 @@
+    file(APPEND ${_laname} "# Should we warn about portability when linking against -modules?\nshouldnotlink=yes\n")
+    file(APPEND ${_laname} "# Files to dlopen/dlpreopen\ndlopen=''\ndlpreopen=''\n")
+    file(APPEND ${_laname} "# Directory that this library needs to be installed in:\n")
+-   file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib/kde3'\n")
++   file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/libx32/kde3'\n")
+ 
+    install_files(${KDE3_LIBTOOL_DIR} FILES ${_laname})
+ endmacro()
+--- cmake-3.1.0/Modules/FindZLIB.cmake~	2014-12-15 20:07:43.000000000 +0000
++++ cmake-3.1.0/Modules/FindZLIB.cmake	2014-12-24 21:00:27.139263296 +0000
+@@ -79,7 +79,7 @@
+ # Try each search configuration.
+ foreach(search ${_ZLIB_SEARCHES})
+   find_path(ZLIB_INCLUDE_DIR NAMES zlib.h        ${${search}} PATH_SUFFIXES include)
+-  find_library(ZLIB_LIBRARY  NAMES ${ZLIB_NAMES} ${${search}} PATH_SUFFIXES lib)
++  find_library(ZLIB_LIBRARY  NAMES ${ZLIB_NAMES} ${${search}} PATH_SUFFIXES libx32)
+ endforeach()
+ 
+ mark_as_advanced(ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+--- cmake-3.1.0/Source/cmFindLibraryCommand.cxx~	2014-12-15 20:07:43.000000000 +0000
++++ cmake-3.1.0/Source/cmFindLibraryCommand.cxx	2014-12-24 21:33:33.561835255 +0000
+@@ -65,6 +65,16 @@
+       }
+     }
+ 
++  if(this->Makefile->GetCMakeInstance()
++     ->GetPropertyAsBool("FIND_LIBRARY_USE_LIBX32_PATHS"))
++    {
++    // add special 64 bit paths if this is a 64 bit compile.
++    if(this->Makefile->PlatformIsx32Bit())
++      {
++      this->AddArchitecturePaths("x32");
++      }
++    }
++
+   std::string library = this->FindLibrary();
+   if(library != "")
+     {
+--- cmake-3.1.0/Source/cmFindPackageCommand.cxx.orig	2014-12-15 20:07:43.000000000 +0000
++++ cmake-3.1.0/Source/cmFindPackageCommand.cxx	2014-12-24 21:35:01.094694382 +0000
+@@ -90,6 +90,14 @@
+     this->UseLib64Paths = true;
+     }
+ 
++  // Lookup whether libx32 paths should be used.
++  if(this->Makefile->PlatformIsx32Bit() &&
++     this->Makefile->GetCMakeInstance()
++     ->GetPropertyAsBool("FIND_LIBRARY_USE_LIBX32_PATHS"))
++    {
++    this->UseLibx32Paths = true;
++    }
++
+   // Check if User Package Registry should be disabled
+   if(this->Makefile->IsOn("CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY"))
+     {
+--- cmake-3.1.0/Source/cmMakefile.cxx~	2014-12-15 20:07:43.000000000 +0000
++++ cmake-3.1.0/Source/cmMakefile.cxx	2014-12-24 21:50:15.543073723 +0000
+@@ -2370,6 +2370,15 @@
+   return false;
+ }
+ 
++bool cmMakefile::PlatformIsx32Bit() const
++{
++#ifdef __ILP32__
++  return true;
++#else
++  return false;
++#endif
++}
++
+ const char* cmMakefile::GetSONameFlag(const std::string& language) const
+ {
+   std::string name = "CMAKE_SHARED_LIBRARY_SONAME";
+--- cmake-3.1.0/Source/cmMakefile.h~	2014-12-15 20:07:43.000000000 +0000
++++ cmake-3.1.0/Source/cmMakefile.h	2014-12-24 21:51:51.335888102 +0000
+@@ -648,6 +648,8 @@
+ 
+   /** Return whether the target platform is 64-bit.  */
+   bool PlatformIs64Bit() const;
++  /** Return whether the target platform is x32-bit.  */
++  bool PlatformIsx32Bit() const;
+ 
+   /** Retrieve soname flag for the specified language if supported */
+   const char* GetSONameFlag(const std::string& language) const;
+--- cmake-3.1.0/Source/cmFindPackageCommand.h~	2014-12-15 20:07:43.000000000 +0000
++++ cmake-3.1.0/Source/cmFindPackageCommand.h	2014-12-24 22:05:38.051409399 +0000
+@@ -124,6 +124,7 @@
+   bool NoBuilds;
+   bool DebugMode;
+   bool UseLib64Paths;
++  bool UseLibx32Paths;
+   bool PolicyScope;
+   std::string LibraryArchitecture;
+   std::vector<std::string> Names;
+--- cmake-3.1.0/Modules/Platform/UnixPaths.cmake~	2014-12-15 20:07:43.000000000 +0000
++++ cmake-3.1.0/Modules/Platform/UnixPaths.cmake	2014-12-24 22:14:56.025053263 +0000
+@@ -95,3 +95,4 @@
+ 
+ # Enable use of lib64 search path variants by default.
+ set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS TRUE)
++set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS TRUE)
+--- cmake-3.1.0/Modules/FindPkgConfig.cmake~	2014-12-15 20:07:43.000000000 +0000
++++ cmake-3.1.0/Modules/FindPkgConfig.cmake	2014-12-24 22:17:04.721022724 +0000
+@@ -241,6 +241,10 @@
+             list(APPEND _lib_dirs "lib64/pkgconfig")
+           endif()
+         endif()
++        get_property(uselibx32 GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS)
++        if(uselibx32)
++          list(APPEND _lib_dirs "libx32/pkgconfig")
++        endif()
+       endif()
+       list(APPEND _lib_dirs "lib/pkgconfig")
+ 

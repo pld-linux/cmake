@@ -8,6 +8,7 @@
 %bcond_with	bootstrap	# use internal versions of some libraries
 %bcond_without	gui		# don't build gui package
 %bcond_without	tests		# do not perform "make test"
+%bcond_without	doc		# don't build documentation
 
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
@@ -25,6 +26,7 @@ Patch3:		%{name}-tests.patch
 Patch4:		%{name}-bug-0015258.patch
 Patch5:		%{name}-findruby2.patch
 Patch6:		%{name}-findpython.patch
+Patch7:		%{name}-libx32.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	libarchive-devel
@@ -33,7 +35,7 @@ BuildRequires:	ncurses-devel > 5.9-3
 %{?with_gui:BuildRequires:	qt4-build}
 %{?with_gui:BuildRequires:	qt4-qmake}
 BuildRequires:	rpmbuild(macros) >= 1.167
-BuildRequires:	sphinx-pdg
+%{?with_doc:BuildRequires:	sphinx-pdg}
 %{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel >= 1.4.12-2}
 Requires:	filesystem >= 3.0-52
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -118,6 +120,9 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%if "%{_lib}" == "libx32"
+%patch7 -p1
+%endif
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
@@ -142,8 +147,8 @@ export LDFLAGS="%{rpmldflags}"
 	%{!?with_bootstrap:--system-libs} \
 	%{?with_gui:--qt-gui} \
 	--qt-qmake=/usr/bin/qmake-qt4 \
-	--sphinx-html \
-	--sphinx-man \
+	%{?with_doc:--sphinx-html} \
+	%{?with_doc:--sphinx-man} \
 	--verbose
 
 %{__make} VERBOSE=1
@@ -167,6 +172,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/cmake
 %attr(755,root,root) %{_bindir}/cpack
 %attr(755,root,root) %{_bindir}/ctest
+%if %{with doc}
 %{_mandir}/man1/ccmake.1*
 %{_mandir}/man1/cmake.1*
 %{_mandir}/man1/cpack.1*
@@ -185,6 +191,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man7/cmake-qt.7*
 %{_mandir}/man7/cmake-toolchains.7*
 %{_mandir}/man7/cmake-variables.7*
+%endif
 # top cmake/Modules dirs belong to filesystem
 %{_datadir}/cmake/Modules/.NoDartCoverage
 %{_datadir}/cmake/Modules/*
@@ -193,9 +200,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/cmake/include
 %{_aclocaldir}/cmake.m4
 
+%if %{with doc}
 %files doc-html
 %defattr(644,root,root,755)
 %doc Utilities/Sphinx/html/*
+%endif
 
 %if %{with gui}
 %files gui
