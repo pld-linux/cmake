@@ -1,4 +1,5 @@
 # TODO:
+# - extend libx32 patch to work also on 64-bit arch
 # - any valid CMAKE_BUILD_TYPE causes overriding of our optflags
 #   (and default non-verbose makefiles are hiding it!)
 # - rpmldflags/rpmcppflags are not passed through %%cmake macro at all
