@@ -8,7 +8,7 @@
 # Conditional build:
 %bcond_with	bootstrap	# use internal versions of some libraries
 %bcond_without	gui		# don't build gui package
-%bcond_without	tests		# do not perform "make test"
+%bcond_with	tests		# perform "make test"
 %bcond_without	doc		# don't build documentation
 
 Summary:	Cross-platform, open-source make system
