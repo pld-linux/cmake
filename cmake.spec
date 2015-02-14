@@ -14,12 +14,12 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.1.2
+Version:	3.1.3
 Release:	1
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v3.1/%{name}-%{version}.tar.gz
-# Source0-md5:	75f61184aa70664bc7b3158293950f04
+# Source0-md5:	5697a77503bb5636f4b4057dcc02aa32
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-helpers.patch
 Patch2:		%{name}-findruby.patch
