@@ -15,7 +15,7 @@ Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
 Version:	3.1.3
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v3.1/%{name}-%{version}.tar.gz
@@ -33,8 +33,8 @@ URL:		http://www.cmake.org/
 BuildRequires:	libarchive-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel > 5.9-3
-%{?with_gui:BuildRequires:	qt4-build}
-%{?with_gui:BuildRequires:	qt4-qmake}
+%{?with_gui:BuildRequires:	qt5-build}
+%{?with_gui:BuildRequires:	qt5-qmake}
 BuildRequires:	rpmbuild(macros) >= 1.167
 %{?with_doc:BuildRequires:	sphinx-pdg}
 %{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel >= 1.4.12-2}
@@ -192,6 +192,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man7/cmake-qt.7*
 %{_mandir}/man7/cmake-toolchains.7*
 %{_mandir}/man7/cmake-variables.7*
+%{_datadir}/cmake/Help
 %endif
 # top cmake/Modules dirs belong to filesystem
 %{_datadir}/cmake/Modules/.NoDartCoverage
@@ -211,7 +212,6 @@ rm -rf $RPM_BUILD_ROOT
 %files gui
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cmake-gui
-%{_datadir}/cmake/Help
 %{_datadir}/mime/packages/cmakecache.xml
 %{_desktopdir}/CMake.desktop
 %{_pixmapsdir}/CMakeSetup32.png
