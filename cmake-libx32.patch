@@ -1,16 +1,44 @@
---- cmake-2.4.10/Modules/KDE3Macros.cmake.orig	2012-11-03 08:29:52.205394821 +0100
-+++ cmake-2.4.10/Modules/KDE3Macros.cmake	2012-11-03 08:31:27.108749182 +0100
-@@ -336,7 +336,7 @@
-    file(APPEND ${_laname} "# Should we warn about portability when linking against -modules?\nshouldnotlink=yes\n")
-    file(APPEND ${_laname} "# Files to dlopen/dlpreopen\ndlopen=''\ndlpreopen=''\n")
-    file(APPEND ${_laname} "# Directory that this library needs to be installed in:\n")
--   file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib/kde3'\n")
-+   file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/libx32/kde3'\n")
+diff -urN cmake-3.1.3/Modules/FindKDE3.cmake cmake-3.1.3.x32/Modules/FindKDE3.cmake
+--- cmake-3.1.3/Modules/FindKDE3.cmake	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Modules/FindKDE3.cmake	2015-03-05 21:21:57.558467591 +0000
+@@ -232,6 +232,8 @@
+ if(NOT KDE3_LIBTOOL_DIR)
+    if(KDE3_KDECORE_LIBRARY MATCHES lib64)
+      set(KDE3_LIBTOOL_DIR /lib64/kde3)
++   elseif(KDE3_KDECORE_LIBRARY MATCHES libx32)
++     set(KDE3_LIBTOOL_DIR /libx32/kde3)
+    else()
+      set(KDE3_LIBTOOL_DIR /lib/kde3)
+    endif()
+diff -urN cmake-3.1.3/Modules/FindOpenAL.cmake cmake-3.1.3.x32/Modules/FindOpenAL.cmake
+--- cmake-3.1.3/Modules/FindOpenAL.cmake	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Modules/FindOpenAL.cmake	2015-03-05 21:20:17.398468317 +0000
+@@ -83,7 +83,7 @@
+   NAMES OpenAL al openal OpenAL32
+   HINTS
+     ENV OPENALDIR
+-  PATH_SUFFIXES lib64 lib libs64 libs libs/Win32 libs/Win64
++  PATH_SUFFIXES libx32 lib64 lib libs64 libs libs/Win32 libs/Win64
+   PATHS
+   ~/Library/Frameworks
+   /Library/Frameworks
+diff -urN cmake-3.1.3/Modules/FindPkgConfig.cmake cmake-3.1.3.x32/Modules/FindPkgConfig.cmake
+--- cmake-3.1.3/Modules/FindPkgConfig.cmake	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Modules/FindPkgConfig.cmake	2015-03-05 21:07:55.938473684 +0000
+@@ -241,6 +241,10 @@
+             list(APPEND _lib_dirs "lib64/pkgconfig")
+           endif()
+         endif()
++        get_property(uselibx32 GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS)
++        if(uselibx32)
++          list(APPEND _lib_dirs "libx32/pkgconfig")
++        endif()
+       endif()
+       list(APPEND _lib_dirs "lib/pkgconfig")
  
-    install_files(${KDE3_LIBTOOL_DIR} FILES ${_laname})
- endmacro()
---- cmake-3.1.0/Modules/FindZLIB.cmake~	2014-12-15 20:07:43.000000000 +0000
-+++ cmake-3.1.0/Modules/FindZLIB.cmake	2014-12-24 21:00:27.139263296 +0000
+diff -urN cmake-3.1.3/Modules/FindZLIB.cmake cmake-3.1.3.x32/Modules/FindZLIB.cmake
+--- cmake-3.1.3/Modules/FindZLIB.cmake	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Modules/FindZLIB.cmake	2015-03-05 21:07:55.935140350 +0000
 @@ -79,7 +79,7 @@
  # Try each search configuration.
  foreach(search ${_ZLIB_SEARCHES})
@@ -20,8 +48,65 @@
  endforeach()
  
  mark_as_advanced(ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
---- cmake-3.1.0/Source/cmFindLibraryCommand.cxx~	2014-12-15 20:07:43.000000000 +0000
-+++ cmake-3.1.0/Source/cmFindLibraryCommand.cxx	2014-12-24 21:33:33.561835255 +0000
+diff -urN cmake-3.1.3/Modules/GetPrerequisites.cmake cmake-3.1.3.x32/Modules/GetPrerequisites.cmake
+--- cmake-3.1.3/Modules/GetPrerequisites.cmake	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Modules/GetPrerequisites.cmake	2015-03-05 21:18:03.455135952 +0000
+@@ -500,7 +500,7 @@
+     string(TOLOWER "${resolved_file}" lower)
+ 
+     if(UNIX)
+-      if(resolved_file MATCHES "^(/lib/|/lib32/|/lib64/|/usr/lib/|/usr/lib32/|/usr/lib64/|/usr/X11R6/|/usr/bin/)")
++      if(resolved_file MATCHES "^(/lib/|/libx32/|/lib64/|/usr/lib/|/usr/libx32/|/usr/lib64/|/usr/X11R6/|/usr/bin/)")
+         set(is_system 1)
+       endif()
+     endif()
+diff -urN cmake-3.1.3/Modules/KDE3Macros.cmake cmake-3.1.3.x32/Modules/KDE3Macros.cmake
+--- cmake-3.1.3/Modules/KDE3Macros.cmake	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Modules/KDE3Macros.cmake	2015-03-05 21:07:55.935140350 +0000
+@@ -336,7 +336,7 @@
+    file(APPEND ${_laname} "# Should we warn about portability when linking against -modules?\nshouldnotlink=yes\n")
+    file(APPEND ${_laname} "# Files to dlopen/dlpreopen\ndlopen=''\ndlpreopen=''\n")
+    file(APPEND ${_laname} "# Directory that this library needs to be installed in:\n")
+-   file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib/kde3'\n")
++   file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/libx32/kde3'\n")
+ 
+    install_files(${KDE3_LIBTOOL_DIR} FILES ${_laname})
+ endmacro()
+diff -urN cmake-3.1.3/Modules/Platform/UnixPaths.cmake cmake-3.1.3.x32/Modules/Platform/UnixPaths.cmake
+--- cmake-3.1.3/Modules/Platform/UnixPaths.cmake	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Modules/Platform/UnixPaths.cmake	2015-03-05 21:14:33.208470807 +0000
+@@ -83,7 +83,7 @@
+   )
+ 
+ list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
+-  /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
++  /lib /lib64 /libx32 /usr/lib /usr/lib64 /usr/libx32
+   )
+ 
+ list(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
+@@ -95,3 +95,4 @@
+ 
+ # Enable use of lib64 search path variants by default.
+ set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS TRUE)
++set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS TRUE)
+diff -urN cmake-3.1.3/Source/cmExportInstallFileGenerator.cxx cmake-3.1.3.x32/Source/cmExportInstallFileGenerator.cxx
+--- cmake-3.1.3/Source/cmExportInstallFileGenerator.cxx	2015-03-05 21:25:13.428466173 +0000
++++ cmake-3.1.3.x32/Source/cmExportInstallFileGenerator.cxx	2015-03-05 21:13:54.475137755 +0000
+@@ -94,8 +94,10 @@
+        << " \"${CMAKE_CURRENT_LIST_FILE}\" PATH)\n";
+     if(cmHasLiteralPrefix(absDestS.c_str(), "/lib/") ||
+        cmHasLiteralPrefix(absDestS.c_str(), "/lib64/") ||
++       cmHasLiteralPrefix(absDestS.c_str(), "/libx32/") ||
+        cmHasLiteralPrefix(absDestS.c_str(), "/usr/lib/") ||
+-       cmHasLiteralPrefix(absDestS.c_str(), "/usr/lib64/"))
++       cmHasLiteralPrefix(absDestS.c_str(), "/usr/lib64/") ||
++       cmHasLiteralPrefix(absDestS.c_str(), "/usr/libx32/"))
+       {
+       // Handle "/usr move" symlinks created by some Linux distros.
+       os <<
+diff -urN cmake-3.1.3/Source/cmFindLibraryCommand.cxx cmake-3.1.3.x32/Source/cmFindLibraryCommand.cxx
+--- cmake-3.1.3/Source/cmFindLibraryCommand.cxx	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Source/cmFindLibraryCommand.cxx	2015-03-05 21:07:55.938473684 +0000
 @@ -65,6 +65,16 @@
        }
      }
@@ -39,9 +124,18 @@
    std::string library = this->FindLibrary();
    if(library != "")
      {
---- cmake-3.1.0/Source/cmFindPackageCommand.cxx.orig	2014-12-15 20:07:43.000000000 +0000
-+++ cmake-3.1.0/Source/cmFindPackageCommand.cxx	2014-12-24 21:35:01.094694382 +0000
-@@ -90,6 +90,14 @@
+diff -urN cmake-3.1.3/Source/cmFindPackageCommand.cxx cmake-3.1.3.x32/Source/cmFindPackageCommand.cxx
+--- cmake-3.1.3/Source/cmFindPackageCommand.cxx	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Source/cmFindPackageCommand.cxx	2015-03-05 21:10:49.355139095 +0000
+@@ -38,6 +38,7 @@
+   this->UseFindModules = true;
+   this->DebugMode = false;
+   this->UseLib64Paths = false;
++  this->UseLibx32Paths = false;
+   this->PolicyScope = true;
+   this->VersionMajor = 0;
+   this->VersionMinor = 0;
+@@ -90,6 +91,14 @@
      this->UseLib64Paths = true;
      }
  
@@ -56,8 +150,31 @@
    // Check if User Package Registry should be disabled
    if(this->Makefile->IsOn("CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY"))
      {
---- cmake-3.1.0/Source/cmMakefile.cxx~	2014-12-15 20:07:43.000000000 +0000
-+++ cmake-3.1.0/Source/cmMakefile.cxx	2014-12-24 21:50:15.543073723 +0000
+@@ -2097,6 +2106,10 @@
+     {
+     common.push_back("lib64");
+     }
++  if(this->UseLibx32Paths)
++    {
++    common.push_back("libx32");
++    }
+   common.push_back("lib");
+   common.push_back("share");
+ 
+diff -urN cmake-3.1.3/Source/cmFindPackageCommand.h cmake-3.1.3.x32/Source/cmFindPackageCommand.h
+--- cmake-3.1.3/Source/cmFindPackageCommand.h	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Source/cmFindPackageCommand.h	2015-03-05 21:07:55.938473684 +0000
+@@ -124,6 +124,7 @@
+   bool NoBuilds;
+   bool DebugMode;
+   bool UseLib64Paths;
++  bool UseLibx32Paths;
+   bool PolicyScope;
+   std::string LibraryArchitecture;
+   std::vector<std::string> Names;
+diff -urN cmake-3.1.3/Source/cmMakefile.cxx cmake-3.1.3.x32/Source/cmMakefile.cxx
+--- cmake-3.1.3/Source/cmMakefile.cxx	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Source/cmMakefile.cxx	2015-03-05 21:07:55.938473684 +0000
 @@ -2370,6 +2370,15 @@
    return false;
  }
@@ -74,8 +191,9 @@
  const char* cmMakefile::GetSONameFlag(const std::string& language) const
  {
    std::string name = "CMAKE_SHARED_LIBRARY_SONAME";
---- cmake-3.1.0/Source/cmMakefile.h~	2014-12-15 20:07:43.000000000 +0000
-+++ cmake-3.1.0/Source/cmMakefile.h	2014-12-24 21:51:51.335888102 +0000
+diff -urN cmake-3.1.3/Source/cmMakefile.h cmake-3.1.3.x32/Source/cmMakefile.h
+--- cmake-3.1.3/Source/cmMakefile.h	2015-02-11 16:17:39.000000000 +0000
++++ cmake-3.1.3.x32/Source/cmMakefile.h	2015-03-05 21:07:55.938473684 +0000
 @@ -648,6 +648,8 @@
  
    /** Return whether the target platform is 64-bit.  */
@@ -85,33 +203,3 @@
  
    /** Retrieve soname flag for the specified language if supported */
    const char* GetSONameFlag(const std::string& language) const;
---- cmake-3.1.0/Source/cmFindPackageCommand.h~	2014-12-15 20:07:43.000000000 +0000
-+++ cmake-3.1.0/Source/cmFindPackageCommand.h	2014-12-24 22:05:38.051409399 +0000
-@@ -124,6 +124,7 @@
-   bool NoBuilds;
-   bool DebugMode;
-   bool UseLib64Paths;
-+  bool UseLibx32Paths;
-   bool PolicyScope;
-   std::string LibraryArchitecture;
-   std::vector<std::string> Names;
---- cmake-3.1.0/Modules/Platform/UnixPaths.cmake~	2014-12-15 20:07:43.000000000 +0000
-+++ cmake-3.1.0/Modules/Platform/UnixPaths.cmake	2014-12-24 22:14:56.025053263 +0000
-@@ -95,3 +95,4 @@
- 
- # Enable use of lib64 search path variants by default.
- set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS TRUE)
-+set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS TRUE)
---- cmake-3.1.0/Modules/FindPkgConfig.cmake~	2014-12-15 20:07:43.000000000 +0000
-+++ cmake-3.1.0/Modules/FindPkgConfig.cmake	2014-12-24 22:17:04.721022724 +0000
-@@ -241,6 +241,10 @@
-             list(APPEND _lib_dirs "lib64/pkgconfig")
-           endif()
-         endif()
-+        get_property(uselibx32 GLOBAL PROPERTY FIND_LIBRARY_USE_LIBX32_PATHS)
-+        if(uselibx32)
-+          list(APPEND _lib_dirs "libx32/pkgconfig")
-+        endif()
-       endif()
-       list(APPEND _lib_dirs "lib/pkgconfig")
- 
