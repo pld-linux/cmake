@@ -14,22 +14,23 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.1.3
-Release:	4
+Version:	3.2.2
+Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	http://www.cmake.org/files/v3.1/%{name}-%{version}.tar.gz
-# Source0-md5:	5697a77503bb5636f4b4057dcc02aa32
+Source0:	http://www.cmake.org/files/v3.2/%{name}-%{version}.tar.gz
+# Source0-md5:	2da57308071ea98b10253a87d2419281
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-helpers.patch
 Patch2:		%{name}-findruby.patch
 Patch3:		%{name}-tests.patch
-Patch4:		%{name}-bug-0015258.patch
+
 Patch5:		%{name}-findruby2.patch
 Patch6:		%{name}-findpython.patch
 Patch7:		%{name}-libx32.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
+BuildRequires:	jsoncpp-devel >= 1.6.2-2
 BuildRequires:	libarchive-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel > 5.9-3
@@ -118,7 +119,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
+
 %patch5 -p1
 %patch6 -p1
 %if "%{_lib}" == "libx32"
@@ -147,7 +148,7 @@ export LDFLAGS="%{rpmldflags}"
 	--init=init.cmake \
 	%{!?with_bootstrap:--system-libs} \
 	%{?with_gui:--qt-gui} \
-	--qt-qmake=/usr/bin/qmake-qt4 \
+	--qt-qmake=%{_bindir}/qmake-qt4 \
 	%{?with_doc:--sphinx-html} \
 	%{?with_doc:--sphinx-man} \
 	--verbose
@@ -214,7 +215,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/cmake-gui
 %{_datadir}/mime/packages/cmakecache.xml
 %{_desktopdir}/CMake.desktop
-%{_pixmapsdir}/CMakeSetup32.png
+%{_iconsdir}/hicolor/128x128/apps/CMakeSetup.png
+%{_iconsdir}/hicolor/32x32/apps/CMakeSetup.png
 %{_mandir}/man1/cmake-gui.1*
 %endif
 
@@ -224,6 +226,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n bash-completion-%{name}
 %defattr(644,root,root,755)
-%{_datadir}/bash-completion/completions/cmake
-%{_datadir}/bash-completion/completions/cpack
-%{_datadir}/bash-completion/completions/ctest
+%{bash_compdir}/cmake
+%{bash_compdir}/cpack
+%{bash_compdir}/ctest
