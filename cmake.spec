@@ -14,17 +14,16 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.2.3
-Release:	2
+Version:	3.3.2
+Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	http://www.cmake.org/files/v3.2/%{name}-%{version}.tar.gz
-# Source0-md5:	d51c92bf66b1e9d4fe2b7aaedd51377c
+Source0:	http://www.cmake.org/files/v3.3/%{name}-%{version}.tar.gz
+# Source0-md5:	5febbd11bcaac854a27eebaf4a124be2
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-helpers.patch
 Patch2:		%{name}-findruby.patch
-Patch3:		%{name}-tests.patch
-Patch4:		cmake-min-ver.patch
+
 Patch5:		%{name}-findruby2.patch
 Patch6:		%{name}-findpython.patch
 Patch7:		%{name}-libx32.patch
@@ -118,8 +117,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %endif
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
+
 %patch5 -p1
 %patch6 -p1
 %if "%{_lib}" == "libx32"
