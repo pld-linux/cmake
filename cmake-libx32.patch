@@ -87,15 +87,15 @@ diff -urN cmake-3.1.3/Modules/KDE3Macros.cmake cmake-3.1.3.x32/Modules/KDE3Macro
              /usr/X11R6/include
 --- cmake-3.2.2/Modules/CPackRPM.cmake~	2015-04-13 19:09:00.000000000 +0200
 +++ cmake-3.2.2/Modules/CPackRPM.cmake	2015-05-24 16:00:57.195091040 +0200
-@@ -979,7 +979,7 @@
- endif()
+@@ -607,7 +607,7 @@
+   endif()
  
- if (NOT DEFINED CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST)
--  set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST /etc /etc/init.d /usr /usr/share /usr/share/doc /usr/bin /usr/lib /usr/lib64 /usr/include)
-+  set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST /etc /etc/init.d /usr /usr/share /usr/share/doc /usr/bin /usr/lib /usr/lib64 /usr/libx32 /usr/include)
-   if (CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION)
-     message("CPackRPM:Debug: Adding ${CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION} to builtin omit list.")
-     list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST "${CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION}")
+   if(NOT DEFINED CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST)
+-    set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST /etc /etc/init.d /usr /usr/share /usr/share/doc /usr/bin /usr/lib /usr/lib64 /usr/include)
++    set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST /etc /etc/init.d /usr /usr/share /usr/share/doc /usr/bin /usr/lib /usr/lib64 /usr/libx32 /usr/include)
+     if(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION)
+       message("CPackRPM:Debug: Adding ${CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION} to builtin omit list.")
+       list(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST "${CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION}")
 --- cmake-3.2.2/Modules/FindDevIL.cmake~	2015-04-13 19:09:00.000000000 +0200
 +++ cmake-3.2.2/Modules/FindDevIL.cmake	2015-05-24 16:02:11.395903299 +0200
 @@ -56,7 +56,7 @@
