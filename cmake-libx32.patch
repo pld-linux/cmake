@@ -39,15 +39,17 @@ diff -urN cmake-3.1.3/Modules/FindPkgConfig.cmake cmake-3.1.3.x32/Modules/FindPk
 diff -urN cmake-3.1.3/Modules/FindZLIB.cmake cmake-3.1.3.x32/Modules/FindZLIB.cmake
 --- cmake-3.1.3/Modules/FindZLIB.cmake	2015-02-11 16:17:39.000000000 +0000
 +++ cmake-3.1.3.x32/Modules/FindZLIB.cmake	2015-03-05 21:07:55.935140350 +0000
-@@ -79,7 +79,7 @@
- # Try each search configuration.
- foreach(search ${_ZLIB_SEARCHES})
-   find_path(ZLIB_INCLUDE_DIR NAMES zlib.h        ${${search}} PATH_SUFFIXES include)
--  find_library(ZLIB_LIBRARY  NAMES ${ZLIB_NAMES} ${${search}} PATH_SUFFIXES lib)
-+  find_library(ZLIB_LIBRARY  NAMES ${ZLIB_NAMES} ${${search}} PATH_SUFFIXES libx32)
- endforeach()
+@@ -85,8 +85,8 @@
+ # Allow ZLIB_LIBRARY to be set manually, as the location of the zlib library
+ if(NOT ZLIB_LIBRARY)
+   foreach(search ${_ZLIB_SEARCHES})
+-    find_library(ZLIB_LIBRARY_RELEASE NAMES ${ZLIB_NAMES} ${${search}} PATH_SUFFIXES lib)
+-    find_library(ZLIB_LIBRARY_DEBUG NAMES ${ZLIB_NAMES_DEBUG} ${${search}} PATH_SUFFIXES lib)
++    find_library(ZLIB_LIBRARY_RELEASE NAMES ${ZLIB_NAMES} ${${search}} PATH_SUFFIXES libx32)
++    find_library(ZLIB_LIBRARY_DEBUG NAMES ${ZLIB_NAMES_DEBUG} ${${search}} PATH_SUFFIXES libx32)
+   endforeach()
  
- mark_as_advanced(ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+   include(${CMAKE_CURRENT_LIST_DIR}/SelectLibraryConfigurations.cmake)
 diff -urN cmake-3.1.3/Modules/GetPrerequisites.cmake cmake-3.1.3.x32/Modules/GetPrerequisites.cmake
 --- cmake-3.1.3/Modules/GetPrerequisites.cmake	2015-02-11 16:17:39.000000000 +0000
 +++ cmake-3.1.3.x32/Modules/GetPrerequisites.cmake	2015-03-05 21:18:03.455135952 +0000

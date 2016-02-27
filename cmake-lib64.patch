@@ -11,12 +11,14 @@
  endmacro()
 --- cmake-3.1.0/Modules/FindZLIB.cmake~	2014-12-15 20:07:43.000000000 +0000
 +++ cmake-3.1.0/Modules/FindZLIB.cmake	2014-12-24 21:00:27.139263296 +0000
-@@ -79,7 +79,7 @@
- # Try each search configuration.
- foreach(search ${_ZLIB_SEARCHES})
-   find_path(ZLIB_INCLUDE_DIR NAMES zlib.h        ${${search}} PATH_SUFFIXES include)
--  find_library(ZLIB_LIBRARY  NAMES ${ZLIB_NAMES} ${${search}} PATH_SUFFIXES lib)
-+  find_library(ZLIB_LIBRARY  NAMES ${ZLIB_NAMES} ${${search}} PATH_SUFFIXES lib64)
- endforeach()
+@@ -85,8 +85,8 @@
+ # Allow ZLIB_LIBRARY to be set manually, as the location of the zlib library
+ if(NOT ZLIB_LIBRARY)
+   foreach(search ${_ZLIB_SEARCHES})
+-    find_library(ZLIB_LIBRARY_RELEASE NAMES ${ZLIB_NAMES} ${${search}} PATH_SUFFIXES lib)
+-    find_library(ZLIB_LIBRARY_DEBUG NAMES ${ZLIB_NAMES_DEBUG} ${${search}} PATH_SUFFIXES lib)
++    find_library(ZLIB_LIBRARY_RELEASE NAMES ${ZLIB_NAMES} ${${search}} PATH_SUFFIXES lib64)
++    find_library(ZLIB_LIBRARY_DEBUG NAMES ${ZLIB_NAMES_DEBUG} ${${search}} PATH_SUFFIXES lib64)
+   endforeach()
  
- mark_as_advanced(ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+   include(${CMAKE_CURRENT_LIST_DIR}/SelectLibraryConfigurations.cmake)
