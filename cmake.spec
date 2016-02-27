@@ -25,6 +25,7 @@ Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-helpers.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
+Patch5:		man-syntax.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
 BuildRequires:	jsoncpp-devel >= 1.6.2-2
@@ -119,6 +120,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
