@@ -28,6 +28,8 @@ Patch4:		%{name}-findruby2.patch
 Patch5:		man-syntax.patch
 URL:		http://www.cmake.org/
 %{?with_gui:BuildRequires:	QtGui-devel}
+BuildRequires:	curl-devel
+BuildRequires:	expat-devel
 BuildRequires:	jsoncpp-devel >= 1.6.2-2
 BuildRequires:	libarchive-devel
 BuildRequires:	libstdc++-devel
@@ -37,6 +39,7 @@ BuildRequires:	ncurses-devel > 5.9-3
 BuildRequires:	rpmbuild(macros) >= 1.167
 %{?with_doc:BuildRequires:	sphinx-pdg}
 %{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel >= 1.4.12-2}
+BuildRequires:	zlib-devel
 Requires:	filesystem >= 3.0-52
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
