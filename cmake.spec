@@ -15,7 +15,7 @@ Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
 Version:	3.5.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Building
 Source0:	http://www.cmake.org/files/v3.5/%{name}-%{version}.tar.gz
