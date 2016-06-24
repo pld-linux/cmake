@@ -14,28 +14,32 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.5.0
-Release:	2
+Version:	3.5.2
+Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	http://www.cmake.org/files/v3.5/%{name}-%{version}.tar.gz
-# Source0-md5:	33c5d09d4c33d4ffcc63578a6ba8777e
+Source0:	https://cmake.org/files/v3.5/%{name}-%{version}.tar.gz
+# Source0-md5:	701386a1b5ec95f8d1075ecf96383e02
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-helpers.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
 Patch5:		man-syntax.patch
-URL:		http://www.cmake.org/
-%{?with_gui:BuildRequires:	QtGui-devel}
+URL:		https://cmake.org/
+%if %{with gui}
+BuildRequires:	Qt5Core-devel >= 5.0
+BuildRequires:	Qt5Gui-devel >= 5.0
+BuildRequires:	Qt5Widgets-devel >= 5.0
+%endif
 BuildRequires:	curl-devel
 BuildRequires:	expat-devel
 BuildRequires:	jsoncpp-devel >= 1.6.2-2
 BuildRequires:	libarchive-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	ncurses-devel > 5.9-3
-%{?with_gui:BuildRequires:	qt5-build}
-%{?with_gui:BuildRequires:	qt5-qmake}
+%{?with_gui:BuildRequires:	qt5-build >= 5.0}
+%{?with_gui:BuildRequires:	qt5-qmake >= 5.0}
 BuildRequires:	rpmbuild(macros) >= 1.167
 %{?with_doc:BuildRequires:	sphinx-pdg}
 %{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel >= 1.4.12-2}
@@ -147,7 +151,7 @@ export LDFLAGS="%{rpmldflags}"
 	--init=init.cmake \
 	%{!?with_bootstrap:--system-libs} \
 	%{?with_gui:--qt-gui} \
-	--qt-qmake=%{_bindir}/qmake-qt4 \
+	--qt-qmake=%{_bindir}/qmake-qt5 \
 	%{?with_doc:--sphinx-html} \
 	%{?with_doc:--sphinx-man} \
 	--verbose
