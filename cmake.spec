@@ -15,7 +15,7 @@ Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
 Version:	3.5.2
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Building
 Source0:	https://cmake.org/files/v3.5/%{name}-%{version}.tar.gz
@@ -26,6 +26,7 @@ Patch2:		%{name}-helpers.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
 Patch5:		man-syntax.patch
+Patch6:		imagemagick7.patch
 URL:		https://cmake.org/
 %if %{with gui}
 BuildRequires:	Qt5Core-devel >= 5.0
@@ -128,6 +129,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
