@@ -14,12 +14,12 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.5.2
-Release:	2
+Version:	3.7.1
+Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	https://cmake.org/files/v3.5/%{name}-%{version}.tar.gz
-# Source0-md5:	701386a1b5ec95f8d1075ecf96383e02
+Source0:	https://cmake.org/files/v3.7/%{name}-%{version}.tar.gz
+# Source0-md5:	d031d5a06e9f1c5367cdfc56fbd2a1c8
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-helpers.patch
@@ -38,6 +38,7 @@ BuildRequires:	expat-devel
 BuildRequires:	jsoncpp-devel >= 1.6.2-2
 BuildRequires:	libarchive-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	libuv-devel
 BuildRequires:	ncurses-devel > 5.9-3
 %{?with_gui:BuildRequires:	qt5-build >= 5.0}
 %{?with_gui:BuildRequires:	qt5-qmake >= 5.0}
@@ -196,6 +197,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man7/cmake-policies.7*
 %{_mandir}/man7/cmake-properties.7*
 %{_mandir}/man7/cmake-qt.7*
+%{_mandir}/man7/cmake-server.7*
 %{_mandir}/man7/cmake-toolchains.7*
 %{_mandir}/man7/cmake-variables.7*
 %{_datadir}/cmake/Help
