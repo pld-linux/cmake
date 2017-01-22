@@ -130,14 +130,16 @@ diff -urN cmake-3.1.3/Modules/KDE3Macros.cmake cmake-3.1.3.x32/Modules/KDE3Macro
 --- cmake-3.2.2/Modules/FindGLEW.cmake~	2015-04-13 19:09:00.000000000 +0200
 +++ cmake-3.2.2/Modules/FindGLEW.cmake	2015-05-24 16:02:42.286243557 +0200
 @@ -35,7 +35,7 @@
- #  License text for the above reference.)
- 
  find_path(GLEW_INCLUDE_DIR GL/glew.h)
--find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib64)
-+find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib64 libx32)
  
- set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
- set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+ if(NOT GLEW_LIBRARY)
+-  find_library(GLEW_LIBRARY_RELEASE NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib64)
+-  find_library(GLEW_LIBRARY_DEBUG NAMES GLEWd glew32d glewd PATH_SUFFIXES lib64)
++  find_library(GLEW_LIBRARY_RELEASE NAMES GLEW glew32 glew glew32s PATH_SUFFIXES libx32 lib64)
++  find_library(GLEW_LIBRARY_DEBUG NAMES GLEWd glew32d glewd PATH_SUFFIXES libx32 lib64)
+ 
+   include(${CMAKE_CURRENT_LIST_DIR}/SelectLibraryConfigurations.cmake)
+   select_library_configurations(GLEW)
 --- cmake-3.2.2/Modules/FindIce.cmake~	2015-04-13 19:09:00.000000000 +0200
 +++ cmake-3.2.2/Modules/FindIce.cmake	2015-05-24 16:03:30.256774179 +0200
 @@ -157,7 +157,7 @@
@@ -169,18 +171,17 @@ diff -urN cmake-3.1.3/Modules/Platform/UnixPaths.cmake cmake-3.1.3.x32/Modules/P
 diff -urN cmake-3.1.3/Source/cmExportInstallFileGenerator.cxx cmake-3.1.3.x32/Source/cmExportInstallFileGenerator.cxx
 --- cmake-3.1.3/Source/cmExportInstallFileGenerator.cxx	2015-03-05 21:25:13.428466173 +0000
 +++ cmake-3.1.3.x32/Source/cmExportInstallFileGenerator.cxx	2015-03-05 21:13:54.475137755 +0000
-@@ -94,8 +94,10 @@
+@@ -194,8 +194,10 @@
+        << "get_filename_component(_IMPORT_PREFIX"
         << " \"${CMAKE_CURRENT_LIST_FILE}\" PATH)\n";
-     if(cmHasLiteralPrefix(absDestS.c_str(), "/lib/") ||
-        cmHasLiteralPrefix(absDestS.c_str(), "/lib64/") ||
-+       cmHasLiteralPrefix(absDestS.c_str(), "/libx32/") ||
-        cmHasLiteralPrefix(absDestS.c_str(), "/usr/lib/") ||
--       cmHasLiteralPrefix(absDestS.c_str(), "/usr/lib64/"))
-+       cmHasLiteralPrefix(absDestS.c_str(), "/usr/lib64/") ||
-+       cmHasLiteralPrefix(absDestS.c_str(), "/usr/libx32/"))
-       {
+     if (cmHasLiteralPrefix(absDestS.c_str(), "/lib/") ||
++        cmHasLiteralPrefix(absDestS.c_str(), "/libx32/") ||
+         cmHasLiteralPrefix(absDestS.c_str(), "/lib64/") ||
+         cmHasLiteralPrefix(absDestS.c_str(), "/usr/lib/") ||
++        cmHasLiteralPrefix(absDestS.c_str(), "/usr/libx32/") ||
+         cmHasLiteralPrefix(absDestS.c_str(), "/usr/lib64/")) {
        // Handle "/usr move" symlinks created by some Linux distros.
-       os <<
+       /* clang-format off */
 diff -urN cmake-3.1.3/Source/cmFindLibraryCommand.cxx cmake-3.1.3.x32/Source/cmFindLibraryCommand.cxx
 --- cmake-3.1.3/Source/cmFindLibraryCommand.cxx	2015-02-11 16:17:39.000000000 +0000
 +++ cmake-3.1.3.x32/Source/cmFindLibraryCommand.cxx	2015-03-05 21:07:55.938473684 +0000
@@ -227,14 +228,13 @@ diff -urN cmake-3.1.3/Source/cmFindPackageCommand.cxx cmake-3.1.3.x32/Source/cmF
    // Check if User Package Registry should be disabled
    if(this->Makefile->IsOn("CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY"))
      {
-@@ -2097,6 +2106,10 @@
-     {
+@@ -2097,6 +2106,9 @@
+   if (this->UseLib64Paths) {
      common.push_back("lib64");
-     }
-+  if(this->UseLibx32Paths)
-+    {
+   }
++  if(this->UseLibx32Paths) {
 +    common.push_back("libx32");
-+    }
++  }
    common.push_back("lib");
    common.push_back("share");
  
