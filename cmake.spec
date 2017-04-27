@@ -1,4 +1,5 @@
 # TODO:
+# - system kwiml?
 # - extend libx32 patch to work also on 64-bit arch
 # - any valid CMAKE_BUILD_TYPE causes overriding of our optflags
 #   (and default non-verbose makefiles are hiding it!)
@@ -8,18 +9,22 @@
 # Conditional build:
 %bcond_with	bootstrap	# use internal versions of some libraries
 %bcond_without	gui		# don't build gui package
+%bcond_with	xmlrpc		# XMLRPC submission method in CTest
 %bcond_with	tests		# perform "make test"
 %bcond_without	doc		# don't build documentation
 
+%if %{with bootstrap}
+%undefine	with_xmlrpc
+%endif
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.7.2
-Release:	2
+Version:	3.8.0
+Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	https://cmake.org/files/v3.7/%{name}-%{version}.tar.gz
-# Source0-md5:	79bd7e65cd81ea3aa2619484ad6ff25a
+Source0:	https://cmake.org/files/v3.8/%{name}-%{version}.tar.gz
+# Source0-md5:	f28cba717ba38ad82a488daed8f45b5b
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-helpers.patch
@@ -27,13 +32,14 @@ Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
 Patch5:		man-syntax.patch
 Patch6:		imagemagick7.patch
+Patch7:		%{name}-xmlrpc.patch
 URL:		https://cmake.org/
 %if %{with gui}
 BuildRequires:	Qt5Core-devel >= 5.0
 BuildRequires:	Qt5Gui-devel >= 5.0
 BuildRequires:	Qt5Widgets-devel >= 5.0
 %endif
-BuildRequires:	curl-devel
+%{!?with_xmlrpc:BuildRequires:	curl-devel}
 BuildRequires:	expat-devel
 BuildRequires:	jsoncpp-devel >= 1.6.2-2
 BuildRequires:	libarchive-devel
@@ -42,10 +48,11 @@ BuildRequires:	libuv-devel
 BuildRequires:	ncurses-devel > 5.9-3
 %{?with_gui:BuildRequires:	qt5-build >= 5.0}
 %{?with_gui:BuildRequires:	qt5-qmake >= 5.0}
+BuildRequires:	rhash-devel
 BuildRequires:	rpmbuild(macros) >= 1.167
 %{?with_doc:BuildRequires:	sphinx-pdg}
-%{!?with_bootstrap:BuildRequires:	xmlrpc-c-devel >= 1.4.12-2}
-BuildRequires:	zlib-devel
+%{?with_xmlrpc:BuildRequires:	xmlrpc-c-devel >= 1.4.12-2}
+%{!?with_xmlrpc:BuildRequires:	zlib-devel}
 Requires:	filesystem >= 3.0-52
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -131,6 +138,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
@@ -157,7 +165,9 @@ export LDFLAGS="%{rpmldflags}"
 	--qt-qmake=%{_bindir}/qmake-qt5 \
 	%{?with_doc:--sphinx-html} \
 	%{?with_doc:--sphinx-man} \
-	--verbose
+	--verbose \
+	-- \
+	%{?with_xmlrpc:-DCTEST_USE_XMLRPC=ON}
 
 %{__make} VERBOSE=1
 
