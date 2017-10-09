@@ -19,19 +19,19 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.8.2
+Version:	3.9.4
 Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	https://cmake.org/files/v3.8/%{name}-%{version}.tar.gz
-# Source0-md5:	b5dff61f6a7f1305271ab3f6ae261419
+Source0:	https://cmake.org/files/v3.9/%{name}-%{version}.tar.gz
+# Source0-md5:	33769e001bdcd788f565bf378692e5ae
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-helpers.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
 Patch5:		man-syntax.patch
-Patch6:		imagemagick7.patch
+
 Patch7:		%{name}-xmlrpc.patch
 URL:		https://cmake.org/
 %if %{with gui}
@@ -137,7 +137,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
+
 %patch7 -p1
 
 cat > "init.cmake" <<EOF
@@ -231,7 +231,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/cmake-gui
 %{_datadir}/mime/packages/cmakecache.xml
-%{_desktopdir}/CMake.desktop
+%{_desktopdir}/cmake-gui.desktop
 %{_iconsdir}/hicolor/128x128/apps/CMakeSetup.png
 %{_iconsdir}/hicolor/32x32/apps/CMakeSetup.png
 %{_mandir}/man1/cmake-gui.1*
