@@ -1,6 +1,6 @@
 # TODO:
 # - system kwiml?
-# - extend libx32 patch to work also on 64-bit arch
+# - make lib64/libx32 patch changes applicable everywhere
 # - any valid CMAKE_BUILD_TYPE causes overriding of our optflags
 #   (and default non-verbose makefiles are hiding it!)
 # - rpmldflags/rpmcppflags are not passed through %%cmake macro at all
@@ -20,7 +20,7 @@ Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
 Version:	3.9.6
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Building
 Source0:	https://cmake.org/files/v3.9/%{name}-%{version}.tar.gz
