@@ -19,20 +19,17 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.13.0
+Version:	3.14.0
 Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	https://cmake.org/files/v3.13/%{name}-%{version}.tar.gz
-# Source0-md5:	14455874345a458345d8e72856ccc04f
+Source0:	https://cmake.org/files/v3.14/%{name}-%{version}.tar.gz
+# Source0-md5:	7504e4f3e05b59e083f2127e07059d5d
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-helpers.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
-Patch5:		man-syntax.patch
-
-Patch7:		%{name}-xmlrpc.patch
 URL:		https://cmake.org/
 %if %{with gui}
 BuildRequires:	Qt5Core-devel >= 5.0
@@ -136,9 +133,6 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
-
-%patch7 -p1
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
@@ -201,6 +195,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man7/cmake-compile-features.7*
 %{_mandir}/man7/cmake-developer.7*
 %{_mandir}/man7/cmake-env-variables.7*
+%if %{with xml_rpc}
+%{_mandir}/man7/cmake-file-api.7*
+%endif
 %{_mandir}/man7/cmake-generator-expressions.7*
 %{_mandir}/man7/cmake-generators.7*
 %{_mandir}/man7/cmake-language.7*
