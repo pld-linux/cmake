@@ -9,13 +9,9 @@
 # Conditional build:
 %bcond_with	bootstrap	# use internal versions of some libraries
 %bcond_without	gui		# don't build gui package
-%bcond_with	xmlrpc		# XMLRPC submission method in CTest
 %bcond_with	tests		# perform "make test"
 %bcond_without	doc		# don't build documentation
 
-%if %{with bootstrap}
-%undefine	with_xmlrpc
-%endif
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
@@ -36,7 +32,7 @@ BuildRequires:	Qt5Core-devel >= 5.0
 BuildRequires:	Qt5Gui-devel >= 5.0
 BuildRequires:	Qt5Widgets-devel >= 5.0
 %endif
-%{!?with_xmlrpc:BuildRequires:	curl-devel}
+BuildRequires:	curl-devel
 BuildRequires:	expat-devel
 BuildRequires:	jsoncpp-devel >= 1.6.2-2
 BuildRequires:	libarchive-devel
@@ -48,8 +44,7 @@ BuildRequires:	ncurses-devel > 5.9-3
 BuildRequires:	rhash-devel
 BuildRequires:	rpmbuild(macros) >= 1.167
 %{?with_doc:BuildRequires:	sphinx-pdg}
-%{?with_xmlrpc:BuildRequires:	xmlrpc-c-devel >= 1.4.12-2}
-%{!?with_xmlrpc:BuildRequires:	zlib-devel}
+BuildRequires:	zlib-devel
 Requires:	filesystem >= 3.0-52
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -159,11 +154,10 @@ export LDFLAGS="%{rpmldflags}"
 	--qt-qmake=%{_bindir}/qmake-qt5 \
 	%{?with_doc:--sphinx-html} \
 	%{?with_doc:--sphinx-man} \
-	--verbose \
-	-- \
-	%{?with_xmlrpc:-DCTEST_USE_XMLRPC=ON}
+	--verbose
 
-%{__make} VERBOSE=1
+%{__make} \
+	VERBOSE=1
 
 %{?with_tests:%{__make} test}
 
@@ -195,9 +189,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man7/cmake-compile-features.7*
 %{_mandir}/man7/cmake-developer.7*
 %{_mandir}/man7/cmake-env-variables.7*
-%if %{with xml_rpc}
 %{_mandir}/man7/cmake-file-api.7*
-%endif
 %{_mandir}/man7/cmake-generator-expressions.7*
 %{_mandir}/man7/cmake-generators.7*
 %{_mandir}/man7/cmake-language.7*
