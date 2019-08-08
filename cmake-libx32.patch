@@ -14,27 +14,31 @@
 --- cmake-3.1.3/Modules/KDE3Macros.cmake	2015-02-11 16:17:39.000000000 +0000
 +++ cmake-3.1.3.x32/Modules/KDE3Macros.cmake	2015-03-05 21:07:55.935140350 +0000
 @@ -336,7 +336,7 @@
-    file(APPEND ${_laname} "# Should we warn about portability when linking against -modules?\nshouldnotlink=yes\n")
-    file(APPEND ${_laname} "# Files to dlopen/dlpreopen\ndlopen=''\ndlpreopen=''\n")
-    file(APPEND ${_laname} "# Directory that this library needs to be installed in:\n")
--   file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib/kde3'\n")
-+   file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/libx32/kde3'\n")
+   file(APPEND ${_laname} "# Should we warn about portability when linking against -modules?\nshouldnotlink=yes\n")
+   file(APPEND ${_laname} "# Files to dlopen/dlpreopen\ndlopen=''\ndlpreopen=''\n")
+   file(APPEND ${_laname} "# Directory that this library needs to be installed in:\n")
+-  file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib/kde3'\n")
++  file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/libx32/kde3'\n")
  
     install_files(${KDE3_LIBTOOL_DIR} FILES ${_laname})
  endmacro()
 --- cmake-3.9.6/Modules/FindGLEW.cmake.orig	2017-11-19 08:53:15.190680707 +0100
 +++ cmake-3.9.6/Modules/FindGLEW.cmake	2017-11-19 08:58:44.667490585 +0100
-@@ -27,8 +27,8 @@
- find_path(GLEW_INCLUDE_DIR GL/glew.h)
+@@ -139,12 +139,12 @@
  
- if(NOT GLEW_LIBRARY)
--  find_library(GLEW_LIBRARY_RELEASE NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib64 libx32)
--  find_library(GLEW_LIBRARY_DEBUG NAMES GLEWd glew32d glewd PATH_SUFFIXES lib64)
-+  find_library(GLEW_LIBRARY_RELEASE NAMES GLEW glew32 glew glew32s PATH_SUFFIXES libx32 lib64)
-+  find_library(GLEW_LIBRARY_DEBUG NAMES GLEWd glew32d glewd PATH_SUFFIXES libx32 lib64)
+ find_library(GLEW_SHARED_LIBRARY_RELEASE
+              NAMES GLEW glew glew32
+-             PATH_SUFFIXES lib lib64 libx32 lib/Release/${_arch}
++             PATH_SUFFIXES libx32 lib64 lib lib/Release/${_arch}
+              PATHS ENV GLEW_ROOT)
  
-   include(${CMAKE_CURRENT_LIST_DIR}/SelectLibraryConfigurations.cmake)
-   select_library_configurations(GLEW)
+ find_library(GLEW_SHARED_LIBRARY_DEBUG
+              NAMES GLEWd glewd glew32d
+-             PATH_SUFFIXES lib lib64
++             PATH_SUFFIXES libx32 lib64 lib
+              PATHS ENV GLEW_ROOT)
+ 
+ 
 --- cmake-3.9.6/Modules/Platform/UnixPaths.cmake	2015-02-11 16:17:39.000000000 +0000
 +++ cmake-3.9.6.x32/Modules/Platform/UnixPaths.cmake	2015-03-05 21:14:33.208470807 +0000
 @@ -83,7 +83,7 @@
