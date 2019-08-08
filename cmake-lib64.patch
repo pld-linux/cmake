@@ -1,13 +1,13 @@
 --- cmake-2.4.10/Modules/KDE3Macros.cmake.orig	2012-11-03 08:29:52.205394821 +0100
 +++ cmake-2.4.10/Modules/KDE3Macros.cmake	2012-11-03 08:31:27.108749182 +0100
 @@ -336,7 +336,7 @@
-    file(APPEND ${_laname} "# Should we warn about portability when linking against -modules?\nshouldnotlink=yes\n")
-    file(APPEND ${_laname} "# Files to dlopen/dlpreopen\ndlopen=''\ndlpreopen=''\n")
-    file(APPEND ${_laname} "# Directory that this library needs to be installed in:\n")
--   file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib/kde3'\n")
-+   file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib64/kde3'\n")
+   file(APPEND ${_laname} "# Should we warn about portability when linking against -modules?\nshouldnotlink=yes\n")
+   file(APPEND ${_laname} "# Files to dlopen/dlpreopen\ndlopen=''\ndlpreopen=''\n")
+   file(APPEND ${_laname} "# Directory that this library needs to be installed in:\n")
+-  file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib/kde3'\n")
++  file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib64/kde3'\n")
  
-    install_files(${KDE3_LIBTOOL_DIR} FILES ${_laname})
+   install_files(${KDE3_LIBTOOL_DIR} FILES ${_laname})
  endmacro()
 --- cmake-3.1.0/Modules/FindZLIB.cmake~	2014-12-15 20:07:43.000000000 +0000
 +++ cmake-3.1.0/Modules/FindZLIB.cmake	2014-12-24 21:00:27.139263296 +0000

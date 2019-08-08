@@ -1,10 +1,10 @@
 --- cmake-2.8.12.2/Modules/FindRuby.cmake~	2014-08-26 22:03:46.000000000 +0200
 +++ cmake-2.8.12.2/Modules/FindRuby.cmake	2014-08-26 22:05:53.115892137 +0200
 @@ -170,6 +170,7 @@
-    find_path(RUBY_CONFIG_INCLUDE_DIR
-      NAMES ruby/config.h  config.h
-      HINTS
-+     ${RUBY_HDR_DIR}
-      ${RUBY_HDR_DIR}/${RUBY_ARCH}
-      ${RUBY_ARCH_DIR}
-      )
+   find_path(RUBY_CONFIG_INCLUDE_DIR
+     NAMES ruby/config.h  config.h
+     HINTS
++      ${RUBY_HDR_DIR}
+       ${RUBY_HDR_DIR}/${RUBY_ARCH}
+       ${RUBY_ARCH_DIR}
+   )
