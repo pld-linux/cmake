@@ -27,6 +27,7 @@ Patch2:		%{name}-helpers.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
 URL:		https://cmake.org/
+# system zlib,bzip2,xz,zstd used only when without system libarchive
 %if %{with gui}
 BuildRequires:	Qt5Core-devel >= 5.0
 BuildRequires:	Qt5Gui-devel >= 5.0
@@ -39,6 +40,7 @@ BuildRequires:	libarchive-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libuv-devel
 BuildRequires:	ncurses-devel > 5.9-3
+BuildRequires:	ncurses-ext-devel > 5.9-3
 %{?with_gui:BuildRequires:	qt5-build >= 5.0}
 %{?with_gui:BuildRequires:	qt5-qmake >= 5.0}
 BuildRequires:	rhash-devel
