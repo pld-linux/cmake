@@ -227,7 +227,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_desktopdir}/cmake-gui.desktop
 %{_iconsdir}/hicolor/128x128/apps/CMakeSetup.png
 %{_iconsdir}/hicolor/32x32/apps/CMakeSetup.png
+%if %{with doc}
 %{_mandir}/man1/cmake-gui.1*
+%endif
 %endif
 
 %files emacs
