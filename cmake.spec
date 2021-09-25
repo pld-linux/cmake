@@ -5,6 +5,8 @@
 #   (and default non-verbose makefiles are hiding it!)
 # - rpmldflags/rpmcppflags are not passed through %%cmake macro at all
 #   (is there any standard way???)
+# - FindJNI.cmake module is a PoS full of random incorrect paths,
+#   needs lib64/libx32 awareness
 #
 # Conditional build:
 %bcond_with	bootstrap	# use internal versions of some libraries
