@@ -2,10 +2,10 @@ diff -urNp -x '*.orig' cmake-3.17.2.org/Modules/FindRuby.cmake cmake-3.17.2/Modu
 --- cmake-3.17.2.org/Modules/FindRuby.cmake	2021-04-12 22:19:23.761018307 +0200
 +++ cmake-3.17.2/Modules/FindRuby.cmake	2021-04-12 22:19:24.521040438 +0200
 @@ -207,6 +207,7 @@ if( "${Ruby_FIND_VERSION_SHORT_NODOT}" G
-   find_path(RUBY_CONFIG_INCLUDE_DIR
+   find_path(Ruby_CONFIG_INCLUDE_DIR
      NAMES ruby/config.h  config.h
      HINTS
-+      ${RUBY_HDR_DIR}
-       ${RUBY_HDR_DIR}/${RUBY_ARCH}
-       ${RUBY_ARCH_DIR}
-       ${RUBY_ARCHHDR_DIR}
++      ${Ruby_HDR_DIR}
+       ${Ruby_HDR_DIR}/${Ruby_ARCH}
+       ${Ruby_ARCH_DIR}
+       ${Ruby_ARCHHDR_DIR}
