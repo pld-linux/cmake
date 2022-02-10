@@ -25,7 +25,6 @@ Source0:	https://cmake.org/files/v3.22/%{name}-%{version}.tar.gz
 # Source0-md5:	f96b91224aa14b09565325b51d60af43
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
-Patch2:		%{name}-helpers.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
 URL:		https://cmake.org/
@@ -127,9 +126,11 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %if "%{_lib}" == "libx32"
 %patch1 -p1
 %endif
-#%patch2 -p1
 %patch3 -p1
 %patch4 -p1
+
+%{__sed} -E -i -e '1s,#!\s*/usr/bin/env\s+bash(\s|$),#!/bin/bash\1,' \
+      Modules/Compiler/XL-Fortran/cpp
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
@@ -198,6 +199,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man7/cmake-modules.7*
 %{_mandir}/man7/cmake-packages.7*
 %{_mandir}/man7/cmake-policies.7*
+%{_mandir}/man7/cmake-presets.7*
 %{_mandir}/man7/cmake-properties.7*
 %{_mandir}/man7/cmake-qt.7*
 %{_mandir}/man7/cmake-server.7*
@@ -209,7 +211,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/cmake/Modules/.NoDartCoverage
 %{_datadir}/cmake/Modules/*
 %{_datadir}/cmake/Templates
-%{_datadir}/cmake/editors
+#%{_datadir}/cmake/editors
 %{_datadir}/cmake/include
 %{_aclocaldir}/cmake.m4
 
