@@ -20,25 +20,42 @@
 -  file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/lib/kde3'\n")
 +  file(APPEND ${_laname} "libdir='${CMAKE_INSTALL_PREFIX}/libx32/kde3'\n")
  
-    install_files(${KDE3_LIBTOOL_DIR} FILES ${_laname})
+   install_files(${KDE3_LIBTOOL_DIR} FILES ${_laname})
  endmacro()
 --- cmake-3.9.6/Modules/FindGLEW.cmake.orig	2017-11-19 08:53:15.190680707 +0100
 +++ cmake-3.9.6/Modules/FindGLEW.cmake	2017-11-19 08:58:44.667490585 +0100
-@@ -139,12 +139,12 @@
- 
+@@ -144,13 +144,13 @@
  find_library(GLEW_SHARED_LIBRARY_RELEASE
               NAMES GLEW glew glew32
+              NAMES_PER_DIR
 -             PATH_SUFFIXES lib lib64 libx32 lib/Release/${_arch}
 +             PATH_SUFFIXES libx32 lib64 lib lib/Release/${_arch}
               PATHS ENV GLEW_ROOT)
  
  find_library(GLEW_SHARED_LIBRARY_DEBUG
               NAMES GLEWd glewd glew32d
+              NAMES_PER_DIR
 -             PATH_SUFFIXES lib lib64
 +             PATH_SUFFIXES libx32 lib64 lib
               PATHS ENV GLEW_ROOT)
  
  
+@@ -159,13 +159,13 @@
+ find_library(GLEW_STATIC_LIBRARY_RELEASE
+              NAMES GLEW glew glew32s
+              NAMES_PER_DIR
+-             PATH_SUFFIXES lib lib64 libx32 lib/Release/${_arch}
++             PATH_SUFFIXES libx32 lib64 lib lib/Release/${_arch}
+              PATHS ENV GLEW_ROOT)
+ 
+ find_library(GLEW_STATIC_LIBRARY_DEBUG
+              NAMES GLEWds glewds glew32ds
+              NAMES_PER_DIR
+-             PATH_SUFFIXES lib lib64
++             PATH_SUFFIXES libx32 lib64 lib
+              PATHS ENV GLEW_ROOT)
+ 
+ set(CMAKE_FIND_LIBRARY_SUFFIXES ${__GLEW_CURRENT_FIND_LIBRARY_SUFFIXES})
 --- cmake-3.9.6/Modules/Platform/UnixPaths.cmake	2015-02-11 16:17:39.000000000 +0000
 +++ cmake-3.9.6.x32/Modules/Platform/UnixPaths.cmake	2015-03-05 21:14:33.208470807 +0000
 @@ -83,7 +83,7 @@
@@ -49,4 +66,4 @@
 +  /lib /lib32 /lib64 /libx32 /usr/lib /usr/lib32 /usr/lib64 /usr/libx32
    )
  
- list(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
+ if(CMAKE_SYSROOT_COMPILE)
