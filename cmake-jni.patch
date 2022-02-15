@@ -1,0 +1,88 @@
+--- cmake-3.22.2/Modules/FindJNI.cmake.orig	2022-01-25 14:45:06.000000000 +0100
++++ cmake-3.22.2/Modules/FindJNI.cmake	2022-02-15 19:29:09.377305753 +0100
+@@ -188,49 +188,27 @@ if (WIN32)
+ endif()
+ 
+ set(_JNI_JAVA_DIRECTORIES_BASE
+-  /usr/lib/jvm/java
+-  /usr/lib/java
+-  /usr/lib/jvm
+-  /usr/local/lib/java
++  /usr/lib${LIB_SUFFIX}/jvm/java
++  /usr/lib${LIB_SUFFIX}/java
++  /usr/lib${LIB_SUFFIX}/jvm
++  /usr/local/lib${LIB_SUFFIX}/java
+   /usr/local/share/java
+-  /usr/lib/j2sdk1.4-sun
+-  /usr/lib/j2sdk1.5-sun
+   /opt/sun-jdk-1.5.0.04
+-  /usr/lib/jvm/java-6-sun
+-  /usr/lib/jvm/java-1.5.0-sun
+-  /usr/lib/jvm/java-6-sun-1.6.0.00       # can this one be removed according to #8821 ? Alex
+-  /usr/lib/jvm/java-6-openjdk
+-  /usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0        # fedora
++  /usr/lib${LIB_SUFFIX}/jvm/java-6-sun
++  /usr/lib${LIB_SUFFIX}/jvm/java-1.5.0-sun
++  /usr/lib${LIB_SUFFIX}/jvm/java-6-sun-1.6.0.00       # can this one be removed according to #8821 ? Alex
++  /usr/lib${LIB_SUFFIX}/jvm/java-6-openjdk
++  /usr/lib${LIB_SUFFIX}/jvm/java-1.6.0-openjdk-1.6.0.0        # fedora
+   # Debian specific paths for default JVM
+-  /usr/lib/jvm/default-java
++  /usr/lib${LIB_SUFFIX}/jvm/default-java
+   # Arch Linux specific paths for default JVM
+-  /usr/lib/jvm/default
+-  # Ubuntu specific paths for default JVM
+-  /usr/lib/jvm/java-11-openjdk-{libarch}    # Ubuntu 18.04 LTS
+-  /usr/lib/jvm/java-8-openjdk-{libarch}     # Ubuntu 15.10
+-  /usr/lib/jvm/java-7-openjdk-{libarch}     # Ubuntu 15.10
+-  /usr/lib/jvm/java-6-openjdk-{libarch}     # Ubuntu 15.10
+-  # OpenBSD specific paths for default JVM
+-  /usr/local/jdk-1.7.0
+-  /usr/local/jre-1.7.0
+-  /usr/local/jdk-1.6.0
+-  /usr/local/jre-1.6.0
+-  # FreeBSD specific paths for default JVM
+-  /usr/local/openjdk15
+-  /usr/local/openjdk14
+-  /usr/local/openjdk13
+-  /usr/local/openjdk12
+-  /usr/local/openjdk11
+-  /usr/local/openjdk8
+-  /usr/local/openjdk7
+-  # SuSE specific paths for default JVM
+-  /usr/lib64/jvm/java
+-  /usr/lib64/jvm/jre
++  /usr/lib${LIB_SUFFIX}/jvm/default
+   )
+ 
+ set(_JNI_JAVA_AWT_LIBRARY_TRIES)
+ set(_JNI_JAVA_INCLUDE_TRIES)
+ 
++if(NOT _JAVA_HOME_EXPLICIT)
+ foreach(_java_dir IN LISTS _JNI_JAVA_DIRECTORIES_BASE)
+   list(APPEND _JNI_JAVA_AWT_LIBRARY_TRIES
+     ${_java_dir}/jre/lib/{libarch}
+@@ -247,6 +225,7 @@ endforeach()
+ JAVA_APPEND_LIBRARY_DIRECTORIES(JAVA_AWT_LIBRARY_DIRECTORIES
+     ${_JNI_JAVA_AWT_LIBRARY_TRIES}
+   )
++endif()
+ 
+ set(JAVA_JVM_LIBRARY_DIRECTORIES)
+ foreach(dir ${JAVA_AWT_LIBRARY_DIRECTORIES})
+@@ -284,6 +263,7 @@ JAVA_APPEND_LIBRARY_DIRECTORIES(JAVA_AWT
+   ${_JNI_JAVA_INCLUDE_TRIES}
+   )
+ 
++if(NOT _JAVA_HOME_EXPLICIT)
+ foreach(JAVA_PROG "${JAVA_RUNTIME}" "${JAVA_COMPILE}" "${JAVA_ARCHIVE}")
+   get_filename_component(jpath "${JAVA_PROG}" PATH)
+   foreach(JAVA_INC_PATH ../include ../java/include ../share/java/include)
+@@ -300,6 +280,7 @@ foreach(JAVA_PROG "${JAVA_RUNTIME}" "${J
+     endif()
+   endforeach()
+ endforeach()
++endif()
+ 
+ if(APPLE)
+   if(CMAKE_FIND_FRAMEWORK STREQUAL "ONLY")

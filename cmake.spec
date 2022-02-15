@@ -25,6 +25,7 @@ Source0:	https://cmake.org/files/v3.22/%{name}-%{version}.tar.gz
 # Source0-md5:	f96b91224aa14b09565325b51d60af43
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
+Patch2:		%{name}-jni.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
 URL:		https://cmake.org/
@@ -126,6 +127,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %if "%{_lib}" == "libx32"
 %patch1 -p1
 %endif
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 
@@ -166,9 +168,13 @@ export LDFLAGS="%{rpmldflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# just a bit more recent than packaged in vim.spec
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/vim
+# packaged as %doc
 %{__rm} -r $RPM_BUILD_ROOT%{_prefix}/doc
 
 %clean
@@ -211,7 +217,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/cmake/Modules/.NoDartCoverage
 %{_datadir}/cmake/Modules/*
 %{_datadir}/cmake/Templates
-#%{_datadir}/cmake/editors
 %{_datadir}/cmake/include
 %{_aclocaldir}/cmake.m4
 
