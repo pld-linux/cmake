@@ -46,6 +46,7 @@ BuildRequires:	ncurses-ext-devel > 5.9-3
 %{?with_gui:BuildRequires:	qt5-build >= 5.0}
 %{?with_gui:BuildRequires:	qt5-qmake >= 5.0}
 BuildRequires:	rhash-devel
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.167
 %{?with_doc:BuildRequires:	sphinx-pdg}
 BuildRequires:	zlib-devel
