@@ -38,9 +38,9 @@ BuildRequires:	Qt5Widgets-devel >= 5.0
 BuildRequires:	curl-devel
 BuildRequires:	expat-devel
 BuildRequires:	jsoncpp-devel >= 1.6.2-2
-BuildRequires:	libarchive-devel
+BuildRequires:	libarchive-devel >= 3.3.3
 BuildRequires:	libstdc++-devel
-BuildRequires:	libuv-devel
+BuildRequires:	libuv-devel >= 1.10.0
 BuildRequires:	ncurses-devel > 5.9-3
 BuildRequires:	ncurses-ext-devel > 5.9-3
 %{?with_gui:BuildRequires:	qt5-build >= 5.0}
@@ -51,6 +51,8 @@ BuildRequires:	rpmbuild(macros) >= 1.167
 %{?with_doc:BuildRequires:	sphinx-pdg}
 BuildRequires:	zlib-devel
 Requires:	filesystem >= 3.0-52
+Requires:	libarchive >= 3.3.3
+Requires:	libuv >= 1.10.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
