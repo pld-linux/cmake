@@ -159,6 +159,7 @@ export LDFLAGS="%{rpmldflags}"
 	--qt-qmake=%{_bindir}/qmake-qt5 \
 	%{?with_doc:--sphinx-html} \
 	%{?with_doc:--sphinx-man} \
+	%{?__jobs:--parallel=%{__jobs}} \
 	--verbose
 
 %{__make} \
