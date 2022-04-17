@@ -1,5 +1,5 @@
 # TODO:
-# - system kwiml?
+# - system kwiml >= 1.0?
 # - make lib64/libx32 patch changes applicable everywhere
 # - any valid CMAKE_BUILD_TYPE causes overriding of our optflags
 #   (and default non-verbose makefiles are hiding it!)
@@ -17,12 +17,12 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.22.2
+Version:	3.23.1
 Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	https://cmake.org/files/v3.22/%{name}-%{version}.tar.gz
-# Source0-md5:	f96b91224aa14b09565325b51d60af43
+Source0:	https://cmake.org/files/v3.23/%{name}-%{version}.tar.gz
+# Source0-md5:	b0d46fdcca030372f0a464146243e193
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-jni.patch
@@ -39,20 +39,23 @@ BuildRequires:	curl-devel
 BuildRequires:	expat-devel
 BuildRequires:	jsoncpp-devel >= 1.6.2-2
 BuildRequires:	libarchive-devel >= 3.3.3
-BuildRequires:	libstdc++-devel
-BuildRequires:	libuv-devel >= 1.10.0
+BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	libuv-devel >= 1.28.0
 BuildRequires:	ncurses-devel > 5.9-3
 BuildRequires:	ncurses-ext-devel > 5.9-3
+BuildRequires:	nghttp2-devel
 %{?with_gui:BuildRequires:	qt5-build >= 5.0}
 %{?with_gui:BuildRequires:	qt5-qmake >= 5.0}
 BuildRequires:	rhash-devel
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.167
 %{?with_doc:BuildRequires:	sphinx-pdg}
+BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
+BuildRequires:	zstd-devel
 Requires:	filesystem >= 3.0-52
 Requires:	libarchive >= 3.3.3
-Requires:	libuv >= 1.10.0
+Requires:	libuv >= 1.28.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
