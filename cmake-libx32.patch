@@ -1,8 +1,8 @@
 --- cmake-3.1.3/Modules/FindZLIB.cmake	2015-02-11 16:17:39.000000000 +0000
 +++ cmake-3.1.3.x32/Modules/FindZLIB.cmake	2015-03-05 21:07:55.935140350 +0000
 @@ -85,8 +85,8 @@
- # Allow ZLIB_LIBRARY to be set manually, as the location of the zlib library
- if(NOT ZLIB_LIBRARY)
+   endif()
+ 
    foreach(search ${_ZLIB_SEARCHES})
 -    find_library(ZLIB_LIBRARY_RELEASE NAMES ${ZLIB_NAMES} NAMES_PER_DIR ${${search}} PATH_SUFFIXES lib)
 -    find_library(ZLIB_LIBRARY_DEBUG NAMES ${ZLIB_NAMES_DEBUG} NAMES_PER_DIR ${${search}} PATH_SUFFIXES lib)
@@ -10,7 +10,7 @@
 +    find_library(ZLIB_LIBRARY_DEBUG NAMES ${ZLIB_NAMES_DEBUG} NAMES_PER_DIR ${${search}} PATH_SUFFIXES libx32)
    endforeach()
  
-   include(${CMAKE_CURRENT_LIST_DIR}/SelectLibraryConfigurations.cmake)
+   # Restore the original find library ordering
 --- cmake-3.1.3/Modules/KDE3Macros.cmake	2015-02-11 16:17:39.000000000 +0000
 +++ cmake-3.1.3.x32/Modules/KDE3Macros.cmake	2015-03-05 21:07:55.935140350 +0000
 @@ -336,7 +336,7 @@
