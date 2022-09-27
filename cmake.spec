@@ -28,6 +28,7 @@ Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-jni.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
+Patch5:		disable-completness-check.patch
 URL:		https://cmake.org/
 # system zlib,bzip2,xz,zstd used only when without system libarchive
 %if %{with gui}
@@ -136,6 +137,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %{__sed} -E -i -e '1s,#!\s*/usr/bin/env\s+bash(\s|$),#!/bin/bash\1,' \
       Modules/Compiler/XL-Fortran/cpp

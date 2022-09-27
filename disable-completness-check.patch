@@ -1,0 +1,11 @@
+--- cmake-3.24.1/Source/cmExportInstallFileGenerator.cxx.orig	2022-08-17 18:54:57.000000000 +0200
++++ cmake-3.24.1/Source/cmExportInstallFileGenerator.cxx	2022-09-27 11:07:37.195039337 +0200
+@@ -163,7 +163,7 @@ bool cmExportInstallFileGenerator::Gener
+   this->LoadConfigFiles(os);
+ 
+   this->CleanupTemporaryVariables(os);
+-  this->GenerateImportedFileCheckLoop(os);
++  //this->GenerateImportedFileCheckLoop(os);
+ 
+   bool result = true;
+   // Generate an import file for each configuration.
