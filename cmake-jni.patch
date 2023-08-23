@@ -1,6 +1,6 @@
---- cmake-3.22.2/Modules/FindJNI.cmake.orig	2022-01-25 14:45:06.000000000 +0100
-+++ cmake-3.22.2/Modules/FindJNI.cmake	2022-02-15 19:29:09.377305753 +0100
-@@ -52,7 +52,7 @@
+--- cmake-3.27.3/Modules/FindJNI.cmake.orig	2023-08-16 19:46:35.000000000 +0200
++++ cmake-3.27.3/Modules/FindJNI.cmake	2023-08-23 18:20:08.029434273 +0200
+@@ -141,7 +141,7 @@ macro(java_append_library_directories _v
      # 1.6.0_18 + icedtea patches. However, it would be much better to base the
      # guess on the first part of the GNU config.guess platform triplet.
      if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
@@ -9,7 +9,7 @@
          set(_java_libarch "x32" "amd64" "i386")
        else()
          set(_java_libarch "amd64" "i386")
-@@ -188,49 +188,27 @@ if (WIN32)
+@@ -272,56 +272,27 @@ if (WIN32)
  endif()
  
  set(_JNI_JAVA_DIRECTORIES_BASE
@@ -41,6 +41,13 @@
    # Arch Linux specific paths for default JVM
 -  /usr/lib/jvm/default
 -  # Ubuntu specific paths for default JVM
+-  /usr/lib/jvm/java-21-openjdk-{libarch}    # Ubuntu 23.04
+-  /usr/lib/jvm/java-20-openjdk-{libarch}    # Ubuntu 22.10
+-  /usr/lib/jvm/java-19-openjdk-{libarch}    # Ubuntu 22.04 LTS
+-  /usr/lib/jvm/java-18-openjdk-{libarch}    # Ubuntu 22.04 LTS
+-  /usr/lib/jvm/java-17-openjdk-{libarch}    # Ubuntu 18.04 LTS
+-  /usr/lib/jvm/java-16-openjdk-{libarch}    # Ubuntu 20.04 LTS
+-  /usr/lib/jvm/java-13-openjdk-{libarch}    # Ubuntu 20.04 LTS
 -  /usr/lib/jvm/java-11-openjdk-{libarch}    # Ubuntu 18.04 LTS
 -  /usr/lib/jvm/java-8-openjdk-{libarch}     # Ubuntu 15.10
 -  /usr/lib/jvm/java-7-openjdk-{libarch}     # Ubuntu 15.10
@@ -71,7 +78,7 @@
  foreach(_java_dir IN LISTS _JNI_JAVA_DIRECTORIES_BASE)
    list(APPEND _JNI_JAVA_AWT_LIBRARY_TRIES
      ${_java_dir}/jre/lib/{libarch}
-@@ -247,6 +225,7 @@ endforeach()
+@@ -338,6 +309,7 @@ endforeach()
  JAVA_APPEND_LIBRARY_DIRECTORIES(JAVA_AWT_LIBRARY_DIRECTORIES
      ${_JNI_JAVA_AWT_LIBRARY_TRIES}
    )
@@ -79,7 +86,7 @@
  
  set(JAVA_JVM_LIBRARY_DIRECTORIES)
  foreach(dir ${JAVA_AWT_LIBRARY_DIRECTORIES})
-@@ -284,6 +263,7 @@ JAVA_APPEND_LIBRARY_DIRECTORIES(JAVA_AWT
+@@ -365,6 +337,7 @@ JAVA_APPEND_LIBRARY_DIRECTORIES(JAVA_AWT
    ${_JNI_JAVA_INCLUDE_TRIES}
    )
  
@@ -87,11 +94,11 @@
  foreach(JAVA_PROG "${JAVA_RUNTIME}" "${JAVA_COMPILE}" "${JAVA_ARCHIVE}")
    get_filename_component(jpath "${JAVA_PROG}" PATH)
    foreach(JAVA_INC_PATH ../include ../java/include ../share/java/include)
-@@ -300,6 +280,7 @@ foreach(JAVA_PROG "${JAVA_RUNTIME}" "${J
+@@ -381,6 +354,7 @@ foreach(JAVA_PROG "${JAVA_RUNTIME}" "${J
      endif()
    endforeach()
  endforeach()
 +endif()
  
  if(APPLE)
-   if(CMAKE_FIND_FRAMEWORK STREQUAL "ONLY")
+   if(DEFINED XCODE_VERSION)

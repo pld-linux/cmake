@@ -10,25 +10,26 @@
 #
 # Conditional build:
 %bcond_with	bootstrap	# use internal versions of some libraries
-%bcond_without	gui		# don't build gui package
+%bcond_without	gui		# gui package
 %bcond_with	tests		# perform "make test"
-%bcond_without	doc		# don't build documentation
+%bcond_without	doc		# documentation
 
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.24.3
+Version:	3.27.3
 Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	https://cmake.org/files/v3.24/%{name}-%{version}.tar.gz
-# Source0-md5:	226dd564164372f9f7d1e21e38e6e8c5
+Source0:	https://cmake.org/files/v3.27/%{name}-%{version}.tar.gz
+# Source0-md5:	7228f5fcc8a858fdeac27e29bda0c144
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-jni.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
 Patch5:		disable-completness-check.patch
+Patch6:		%{name}-zlib.patch
 URL:		https://cmake.org/
 # system zlib,bzip2,xz,zstd used only when without system libarchive
 %if %{with gui}
@@ -36,6 +37,7 @@ BuildRequires:	Qt5Core-devel >= 5.0
 BuildRequires:	Qt5Gui-devel >= 5.0
 BuildRequires:	Qt5Widgets-devel >= 5.0
 %endif
+BuildRequires:	cppdap-devel
 BuildRequires:	curl-devel
 BuildRequires:	expat-devel
 BuildRequires:	jsoncpp-devel >= 1.6.2-2
@@ -138,9 +140,10 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
-%{__sed} -E -i -e '1s,#!\s*/usr/bin/env\s+bash(\s|$),#!/bin/bash\1,' \
-      Modules/Compiler/XL-Fortran/cpp
+%{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' \
+	Modules/Compiler/XL-Fortran/cpp
 
 cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
@@ -205,6 +208,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man7/cmake-buildsystem.7*
 %{_mandir}/man7/cmake-commands.7*
 %{_mandir}/man7/cmake-compile-features.7*
+%{_mandir}/man7/cmake-configure-log.7*
 %{_mandir}/man7/cmake-developer.7*
 %{_mandir}/man7/cmake-env-variables.7*
 %{_mandir}/man7/cmake-file-api.7*
