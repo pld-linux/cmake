@@ -37,6 +37,7 @@ BuildRequires:	Qt5Core-devel >= 5.0
 BuildRequires:	Qt5Gui-devel >= 5.0
 BuildRequires:	Qt5Widgets-devel >= 5.0
 %endif
+BuildRequires:	automake
 BuildRequires:	cppdap-devel
 BuildRequires:	curl-devel
 BuildRequires:	expat-devel
