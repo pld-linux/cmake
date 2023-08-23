@@ -30,6 +30,7 @@ Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
 Patch5:		disable-completness-check.patch
 Patch6:		%{name}-zlib.patch
+Patch7:		atomic.patch
 URL:		https://cmake.org/
 # system zlib,bzip2,xz,zstd used only when without system libarchive
 %if %{with gui}
@@ -43,6 +44,9 @@ BuildRequires:	curl-devel
 BuildRequires:	expat-devel
 BuildRequires:	jsoncpp-devel >= 1.6.2-2
 BuildRequires:	libarchive-devel >= 3.3.3
+%ifnarch %arch_with_atomics64
+BuildRequires:	libatomic-devel
+%endif
 BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	libuv-devel >= 1.28.0
 BuildRequires:	ncurses-devel > 5.9-3
@@ -52,7 +56,7 @@ BuildRequires:	nghttp2-devel
 %{?with_gui:BuildRequires:	qt5-qmake >= 5.0}
 BuildRequires:	rhash-devel
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.167
+BuildRequires:	rpmbuild(macros) >= 2.025
 %{?with_doc:BuildRequires:	sphinx-pdg}
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
@@ -145,6 +149,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' \
 	Modules/Compiler/XL-Fortran/cpp
