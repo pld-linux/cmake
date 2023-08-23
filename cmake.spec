@@ -95,7 +95,10 @@ Dokumentacja do pakietu CMake w formacie HTML.
 Summary:	Qt GUI for CMake
 Summary(pl.UTF-8):	Graficzny interfejs użytkownika Qt dla CMake
 Group:		Development/Tools
+Requires(post,postun):	desktop-file-utils
+Requires(post,postun):	gtk-update-icon-cache
 Requires:	%{name} = %{version}-%{release}
+Requires:	hicolor-icon-theme
 
 %description gui
 This package contains the Qt based GUI for CMake.
@@ -192,6 +195,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post gui
+%update_desktop_database_post
+%update_icon_cache hicolor
+
+%postun gui
+%update_desktop_database_postun
+%update_icon_cache hicolor
 
 %files
 %defattr(644,root,root,755)
