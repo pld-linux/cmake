@@ -17,20 +17,18 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.27.3
+Version:	3.27.5
 Release:	1
 License:	BSD
 Group:		Development/Building
 Source0:	https://cmake.org/files/v3.27/%{name}-%{version}.tar.gz
-# Source0-md5:	7228f5fcc8a858fdeac27e29bda0c144
+# Source0-md5:	fbda83fa70276f6971cab8cdb1407191
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-jni.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
 Patch5:		disable-completness-check.patch
-Patch6:		%{name}-zlib.patch
-Patch7:		atomic.patch
 URL:		https://cmake.org/
 # system zlib,bzip2,xz,zstd used only when without system libarchive
 %if %{with gui}
@@ -148,8 +146,6 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
-%patch7 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' \
 	Modules/Compiler/XL-Fortran/cpp
