@@ -158,6 +158,14 @@ cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
 SET (CMAKE_INSTALL_SYSCONFDIR "%{_sysconfdir}" CACHE PATH " " FORCE)
 SET (CMAKE_INSTALL_DATADIR "%{_datadir}" CACHE PATH " " FORCE)
+SET (CMAKE_SYSTEM_NAME "Linux" CACHE STRING " " FORCE)
+SET (CMAKE_SYSTEM_VERSION "%(uname -r)" CACHE STRING " " FORCE)
+SET (CMAKE_CROSSCOMPILING FALSE CACHE BOOL " " FORCE)
+%ifarch x32
+SET (CMAKE_SYSTEM_PROCESSOR "x86_64" CACHE STRING " " FORCE)
+%else
+SET (CMAKE_SYSTEM_PROCESSOR "%{_target_cpu}" CACHE STRING " " FORCE)
+%endif
 EOF
 
 # cleanup backups after patching, modules are copied as-is
