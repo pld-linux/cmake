@@ -1,15 +1,15 @@
---- cmake-3.27.3/Modules/FindJNI.cmake.orig	2023-08-16 19:46:35.000000000 +0200
-+++ cmake-3.27.3/Modules/FindJNI.cmake	2023-08-23 18:20:08.029434273 +0200
+--- cmake-3.28.5/Modules/FindJNI.cmake.orig	2024-05-07 14:42:47.000000000 +0200
++++ cmake-3.28.5/Modules/FindJNI.cmake	2024-05-25 08:26:32.741070928 +0200
 @@ -141,7 +141,7 @@ macro(java_append_library_directories _v
-     # 1.6.0_18 + icedtea patches. However, it would be much better to base the
-     # guess on the first part of the GNU config.guess platform triplet.
-     if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
--      if(CMAKE_LIBRARY_ARCHITECTURE STREQUAL "x86_64-linux-gnux32")
-+      if(CMAKE_LIBRARY_ARCHITECTURE STREQUAL "x86_64-linux-gnux32" OR LIB_SUFFIX STREQUAL "x32")
-         set(_java_libarch "x32" "amd64" "i386")
-       else()
-         set(_java_libarch "amd64" "i386")
-@@ -272,56 +272,27 @@ if (WIN32)
+   # 1.6.0_18 + icedtea patches. However, it would be much better to base the
+   # guess on the first part of the GNU config.guess platform triplet.
+   if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+-    if(CMAKE_LIBRARY_ARCHITECTURE STREQUAL "x86_64-linux-gnux32")
++    if(CMAKE_LIBRARY_ARCHITECTURE STREQUAL "x86_64-linux-gnux32" OR LIB_SUFFIX STREQUAL "x32")
+       set(_java_libarch "x32" "amd64" "i386")
+     else()
+       set(_java_libarch "amd64" "i386")
+@@ -271,56 +271,27 @@ if (WIN32)
  endif()
  
  set(_JNI_JAVA_DIRECTORIES_BASE
@@ -78,23 +78,23 @@
  foreach(_java_dir IN LISTS _JNI_JAVA_DIRECTORIES_BASE)
    list(APPEND _JNI_JAVA_AWT_LIBRARY_TRIES
      ${_java_dir}/jre/lib/{libarch}
-@@ -338,6 +309,7 @@ endforeach()
+@@ -337,6 +308,7 @@ endforeach()
  JAVA_APPEND_LIBRARY_DIRECTORIES(JAVA_AWT_LIBRARY_DIRECTORIES
      ${_JNI_JAVA_AWT_LIBRARY_TRIES}
    )
 +endif()
  
  set(JAVA_JVM_LIBRARY_DIRECTORIES)
- foreach(dir ${JAVA_AWT_LIBRARY_DIRECTORIES})
-@@ -365,6 +337,7 @@ JAVA_APPEND_LIBRARY_DIRECTORIES(JAVA_AWT
+ foreach(dir IN LISTS JAVA_AWT_LIBRARY_DIRECTORIES)
+@@ -364,6 +336,7 @@ JAVA_APPEND_LIBRARY_DIRECTORIES(JAVA_AWT
    ${_JNI_JAVA_INCLUDE_TRIES}
    )
  
 +if(NOT _JAVA_HOME_EXPLICIT)
- foreach(JAVA_PROG "${JAVA_RUNTIME}" "${JAVA_COMPILE}" "${JAVA_ARCHIVE}")
+ foreach(JAVA_PROG IN ITEMS "${JAVA_RUNTIME}" "${JAVA_COMPILE}" "${JAVA_ARCHIVE}")
    get_filename_component(jpath "${JAVA_PROG}" PATH)
-   foreach(JAVA_INC_PATH ../include ../java/include ../share/java/include)
-@@ -381,6 +354,7 @@ foreach(JAVA_PROG "${JAVA_RUNTIME}" "${J
+   foreach(JAVA_INC_PATH IN ITEMS ../include ../java/include ../share/java/include)
+@@ -380,6 +353,7 @@ foreach(JAVA_PROG IN ITEMS "${JAVA_RUNTI
      endif()
    endforeach()
  endforeach()
