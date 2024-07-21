@@ -17,12 +17,12 @@
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.28.5
+Version:	3.29.7
 Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	https://cmake.org/files/v3.28/%{name}-%{version}.tar.gz
-# Source0-md5:	30cf6589ef90b252d0155e9884bd9221
+Source0:	https://cmake.org/files/v3.29/%{name}-%{version}.tar.gz
+# Source0-md5:	06b080dbc2943b9f905df961e8fb9aa7
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-jni.patch
