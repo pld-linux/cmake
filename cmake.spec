@@ -11,18 +11,19 @@
 # Conditional build:
 %bcond_with	bootstrap	# use internal versions of some libraries
 %bcond_without	gui		# gui package
+%bcond_with	qt5		# Qt5 instead of Qt6
 %bcond_with	tests		# perform "make test"
 %bcond_without	doc		# documentation
 
 Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
-Version:	3.30.3
+Version:	3.31.7
 Release:	1
 License:	BSD
 Group:		Development/Building
-Source0:	https://cmake.org/files/v3.30/%{name}-%{version}.tar.gz
-# Source0-md5:	4ca6d3265a257627a2e1c955affb2ba3
+Source0:	https://cmake.org/files/v3.31/%{name}-%{version}.tar.gz
+# Source0-md5:	44758a8e220b4251064a56e6e6df8ae1
 Patch0:		%{name}-lib64.patch
 Patch1:		%{name}-libx32.patch
 Patch2:		%{name}-jni.patch
@@ -31,11 +32,6 @@ Patch4:		%{name}-findruby2.patch
 Patch5:		disable-completness-check.patch
 URL:		https://cmake.org/
 # system zlib,bzip2,xz,zstd used only when without system libarchive
-%if %{with gui}
-BuildRequires:	Qt5Core-devel >= 5.0
-BuildRequires:	Qt5Gui-devel >= 5.0
-BuildRequires:	Qt5Widgets-devel >= 5.0
-%endif
 BuildRequires:	automake
 BuildRequires:	cppdap-devel
 BuildRequires:	curl-devel
@@ -50,8 +46,6 @@ BuildRequires:	libuv-devel >= 1.28.0
 BuildRequires:	ncurses-devel > 5.9-3
 BuildRequires:	ncurses-ext-devel > 5.9-3
 BuildRequires:	nghttp2-devel
-%{?with_gui:BuildRequires:	qt5-build >= 5.0}
-%{?with_gui:BuildRequires:	qt5-qmake >= 5.0}
 BuildRequires:	rhash-devel
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 2.025
@@ -59,6 +53,21 @@ BuildRequires:	rpmbuild(macros) >= 2.025
 BuildRequires:	xz-devel
 BuildRequires:	zlib-devel
 BuildRequires:	zstd-devel
+%if %{with gui}
+%if %{with qt5}
+BuildRequires:	Qt5Core-devel >= 5.0
+BuildRequires:	Qt5Gui-devel >= 5.0
+BuildRequires:	Qt5Widgets-devel >= 5.0
+BuildRequires:	qt5-build >= 5.0
+BuildRequires:	qt5-qmake >= 5.0
+%else
+BuildRequires:	Qt6Core-devel >= 6.0
+BuildRequires:	Qt6Gui-devel >= 6.0
+BuildRequires:	Qt6Widgets-devel >= 6.0
+BuildRequires:	qt6-build >= 6.0
+BuildRequires:	qt6-qmake >= 6.0
+%endif
+%endif
 Requires:	filesystem >= 3.0-52
 Requires:	libarchive >= 3.3.3
 Requires:	libuv >= 1.28.0
@@ -154,6 +163,9 @@ cat > "init.cmake" <<EOF
 SET (CURSES_INCLUDE_PATH "/usr/include/ncurses" CACHE PATH " " FORCE)
 SET (CMAKE_INSTALL_SYSCONFDIR "%{_sysconfdir}" CACHE PATH " " FORCE)
 SET (CMAKE_INSTALL_DATADIR "%{_datadir}" CACHE PATH " " FORCE)
+%if %{with qt5}
+SET (CMake_QT_MAJOR_VERSION "5" CACHE STRING " " FORCE)
+%endif
 SET (CMAKE_SYSTEM_NAME "Linux" CACHE STRING " " FORCE)
 SET (CMAKE_SYSTEM_VERSION "%(uname -r)" CACHE STRING " " FORCE)
 SET (CMAKE_CROSSCOMPILING FALSE CACHE BOOL " " FORCE)
@@ -180,7 +192,7 @@ export LDFLAGS="%{rpmldflags}"
 	--init=init.cmake \
 	%{!?with_bootstrap:--system-libs} \
 	%{?with_gui:--qt-gui} \
-	--qt-qmake=%{_bindir}/qmake-qt5 \
+	--qt-qmake=%{_bindir}/qmake-qt%{?with_qt5:5}%{!?with_qt5:6} \
 	%{?with_doc:--sphinx-html} \
 	%{?with_doc:--sphinx-man} \
 	%{?__jobs:--parallel=%{__jobs}} \
@@ -249,7 +261,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/cmake/Help
 %endif
 # top cmake/Modules dirs belong to filesystem
-%{_datadir}/cmake/Modules/.NoDartCoverage
 %{_datadir}/cmake/Modules/*
 %{_datadir}/cmake/Templates
 %{_datadir}/cmake/include
