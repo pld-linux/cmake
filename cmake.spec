@@ -19,7 +19,7 @@ Summary:	Cross-platform, open-source make system
 Summary(pl.UTF-8):	Wieloplatformowy system make o otwartych źródłach
 Name:		cmake
 Version:	3.31.8
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Building
 Source0:	https://cmake.org/files/v3.31/%{name}-%{version}.tar.gz
@@ -30,6 +30,7 @@ Patch2:		%{name}-jni.patch
 Patch3:		%{name}-findruby.patch
 Patch4:		%{name}-findruby2.patch
 Patch5:		disable-completness-check.patch
+Patch6:		%{name}-types.patch
 URL:		https://cmake.org/
 # system zlib,bzip2,xz,zstd used only when without system libarchive
 BuildRequires:	automake
@@ -155,6 +156,7 @@ Bashowe dopełnianie parametrów dla cmake'a.
 %patch -P3 -p1
 %patch -P4 -p1
 %patch -P5 -p1
+%patch -P6 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env bash,/bin/bash,' \
 	Modules/Compiler/XL-Fortran/cpp
