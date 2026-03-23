@@ -123,6 +123,7 @@ CMake.
 Summary:	Emacs mode for cmake files
 Summary(pl.UTF-8):	Tryb Emacsa dla plików cmake'a
 Group:		Development/Tools
+BuildArch:	noarch
 
 %description emacs
 Emacs mode for cmake files.
